@@ -33,6 +33,7 @@ val effectie: ModuleID = "io.kevinlee" %% "effectie-cats-effect" % "1.0.0"
 val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % "0.3.1"
 
 lazy val root = (project in file("."))
+  .enablePlugins(DevOopsGitReleasePlugin)
   .settings(
     organization := "io.kevinlee"
   , name         := "sbt-just-docusaurus"
@@ -71,10 +72,16 @@ lazy val root = (project in file("."))
       Seq(cats, catsEffect, github4s, http4sDsl, http4sClient, effectie, loggerFCatsEffect) ++ hedgehogLibs
   , testFrameworks ++= Seq(TestFramework("hedgehog.sbt.Framework"))
 
-  , licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+  /* GitHub Release { */
+  , artifactsRequiredForGitHubRelease := false
+  , devOopsPackagedArtifacts := List.empty[String]
+  /* } GitHub Release */
+  /* Publish { */
   , publishMavenStyle := false
+  , licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
   , bintrayPackageLabels := Seq("sbt", "plugin")
   , bintrayVcsUrl := Some("""https://github.com/Kevin-Lee/sbt-just-docusaurus""")
   , bintrayRepository := "sbt-plugins"
+  /* } Publish */
   )
