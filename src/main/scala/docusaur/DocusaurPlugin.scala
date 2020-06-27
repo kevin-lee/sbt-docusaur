@@ -4,6 +4,8 @@ import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
 
 import cats.effect._
 import docusaur.npm.{Npm, NpmCmd}
+import githubpages.GitHubPagesPlugin
+import githubpages.GitHubPagesPlugin.{autoImport => ghpg}
 import loggerf.sbt.SbtLogger2
 import sbt.Keys.streams
 import sbt._
@@ -15,7 +17,7 @@ import sbt.util.Logger
  */
 object DocusaurPlugin extends AutoPlugin {
 
-  override def requires: Plugins = empty
+  override def requires: Plugins = GitHubPagesPlugin
   override def trigger: PluginTrigger = noTrigger
 
   object autoImport extends DocusaurKeys
@@ -120,7 +122,9 @@ object DocusaurPlugin extends AutoPlugin {
         )
         .unsafeRunSync()
       )
-    }.value
+    }.value,
+
+    ghpg.gitHubPagesSiteDir := docusaurBuildDir.value,
 
   )
 
