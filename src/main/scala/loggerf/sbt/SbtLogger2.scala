@@ -2,7 +2,7 @@ package loggerf.sbt
 
 import sbt.Logger
 
-final class SbtLogger(val log: Logger) extends loggerf.Logger {
+final class SbtLogger2(val log: Logger) extends loggerf.Logger {
 
   override def debug(message: String): Unit = log.debug(message)
 
@@ -13,7 +13,7 @@ final class SbtLogger(val log: Logger) extends loggerf.Logger {
   override def error(message: String): Unit = log.error(message)
 }
 
-object SbtLogger {
+object SbtLogger2 {
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
-  def sbtLogger(implicit log: Logger): SbtLogger = new SbtLogger(log)
+  def sbtLogger(implicit log: Logger): loggerf.Logger = new SbtLogger2(log)
 }

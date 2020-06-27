@@ -32,22 +32,25 @@ val http4sClient: ModuleID = "org.http4s" %% "http4s-blaze-client" % http4sVersi
 val effectie: ModuleID = "io.kevinlee" %% "effectie-cats-effect" % "1.0.0"
 val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % "0.3.1"
 
+val ProjectName: String = "sbt-docusaur"
+val GitHubUsername: String = "Kevin-Lee"
+
 lazy val root = (project in file("."))
   .enablePlugins(DevOopsGitReleasePlugin)
   .settings(
     organization := "io.kevinlee"
-  , name         := "sbt-just-docusaurus"
+  , name         := ProjectName
   , scalaVersion := ProjectScalaVersion
   , version      := ProjectVersion
   , description  := "sbt plugin to publish GitHub Pages"
   , developers   := List(
-      Developer("Kevin-Lee", "Kevin Lee", "kevin.code@kevinlee.io", url("https://github.com/Kevin-Lee"))
+      Developer("$GitHubUsername", "Kevin Lee", "kevin.code@kevinlee.io", url("https://github.com/$GitHubUsername"))
     )
-  , homepage := Some(url("https://github.com/Kevin-Lee/sbt-just-docusaurus"))
+  , homepage := Some(url(s"https://github.com/$GitHubUsername/$ProjectName"))
   , scmInfo :=
       Some(ScmInfo(
-        url("https://github.com/Kevin-Lee/sbt-just-docusaurus")
-      , "git@github.com:Kevin-Lee/sbt-just-docusaurus.git"
+        url(s"https://github.com/$GitHubUsername/$ProjectName")
+      , s"git@github.com:$GitHubUsername/$ProjectName.git"
     ))
 
   , startYear := Some(2020)
@@ -81,7 +84,7 @@ lazy val root = (project in file("."))
   , licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
   , bintrayPackageLabels := Seq("sbt", "plugin")
-  , bintrayVcsUrl := Some("""https://github.com/Kevin-Lee/sbt-just-docusaurus""")
+  , bintrayVcsUrl := Some(s"""https://github.com/$GitHubUsername/$ProjectName""")
   , bintrayRepository := "sbt-plugins"
   /* } Publish */
   )
