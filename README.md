@@ -1,2 +1,2 @@
-# sbt-just-docusaurus
+# sbt-docusaur
 Just sbt plugin for Docusaurus

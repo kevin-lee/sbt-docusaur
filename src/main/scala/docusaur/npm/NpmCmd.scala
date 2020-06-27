@@ -1,4 +1,4 @@
-package just.docusaurus.npm
+package docusaur.npm
 
 /**
  * @author Kevin Lee

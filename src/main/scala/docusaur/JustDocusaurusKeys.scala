@@ -1,4 +1,4 @@
-package just.docusaurus
+package docusaur
 
 import java.io.File
 
