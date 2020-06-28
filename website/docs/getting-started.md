@@ -24,8 +24,10 @@ lazy val root = (project in file("."))
   .settings(
     organization := "com.some.org",
     name         := "project-name",
+
     docusaurDir := (ThisBuild / baseDirectory).value / "website",
     docusaurBuildDir := docusaurDir.value / "build",
+
     gitHubPagesOrgName := "github-username",
     gitHubPagesRepoName := "project-name"
   )
