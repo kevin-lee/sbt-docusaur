@@ -32,11 +32,11 @@ val http4sClient: ModuleID = "org.http4s" %% "http4s-blaze-client" % http4sVersi
 val effectie: ModuleID = "io.kevinlee" %% "effectie-cats-effect" % "1.0.0"
 val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % "0.3.1"
 
-val ProjectName: String = "sbt-docusaur"
 val GitHubUsername: String = "Kevin-Lee"
+val ProjectName: String = "sbt-docusaur"
 
 lazy val root = (project in file("."))
-  .enablePlugins(DevOopsGitReleasePlugin)
+  .enablePlugins(DevOopsGitReleasePlugin, DocusaurPlugin)
   .settings(
     organization := "io.kevinlee"
   , name         := ProjectName
@@ -44,7 +44,7 @@ lazy val root = (project in file("."))
   , version      := ProjectVersion
   , description  := "sbt plugin to publish GitHub Pages"
   , developers   := List(
-      Developer("$GitHubUsername", "Kevin Lee", "kevin.code@kevinlee.io", url("https://github.com/$GitHubUsername"))
+      Developer(GitHubUsername, "Kevin Lee", "kevin.code@kevinlee.io", url(s"https://github.com/$GitHubUsername"))
     )
   , homepage := Some(url(s"https://github.com/$GitHubUsername/$ProjectName"))
   , scmInfo :=
@@ -89,4 +89,13 @@ lazy val root = (project in file("."))
   , bintrayVcsUrl := Some(s"""https://github.com/$GitHubUsername/$ProjectName""")
   , bintrayRepository := "sbt-plugins"
   /* } Publish */
+
+  /* Docs { */
+  , docusaurDir := (ThisBuild / baseDirectory).value / "website"
+  , docusaurBuildDir := docusaurDir.value / "build"
+
+  , gitHubPagesOrgName := GitHubUsername
+  , gitHubPagesRepoName := ProjectName
+  /* } Docs */
+
   )
