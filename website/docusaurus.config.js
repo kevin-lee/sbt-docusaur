@@ -10,8 +10,8 @@ const isSearchable = !isEmptyObject(algoliaConfig)
 const websiteConfig = {
   title: 'sbt-docusaur',
   tagline: 'sbt plugin for Docusaurus',
-  url: 'https://kevin-lee.github.io',
-  baseUrl: '/sbt-docusaur/',
+  url: 'http://sbt-docusaur.kevinly.dev',
+  baseUrl: '/',
   favicon: 'img/favicon.png',
   organizationName: 'Kevin-Lee', // Usually your GitHub org/user name.
   projectName: 'sbt-docusaur', // Usually your repo name.

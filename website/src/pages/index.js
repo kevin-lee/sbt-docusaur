@@ -56,8 +56,8 @@ function Home() {
   const {siteConfig = {}} = context;
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={`${siteConfig.title}, sbt plugin for Docusaurus`}
+      description={`${siteConfig.title}, an easy way to publish your Docusaurus website`}>
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <img src={`${useBaseUrl('img/')}/poster.png`} alt="Project Logo" />
