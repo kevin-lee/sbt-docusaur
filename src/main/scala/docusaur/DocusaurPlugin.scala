@@ -102,13 +102,13 @@ object DocusaurPlugin extends AutoPlugin {
       )
     }.value,
 
-    docusaurAlgoliaConfigFileName := sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json"),
+    docusaurAlgoliaConfigFilename := sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json"),
     docusaurAlgoliaApiKey := sys.env.get("ALGOLIA_API_KEY"),
     docusaurAlgoliaIndexName := sys.env.get("ALGOLIA_INDEX_NAME"),
 
     docusaurGenerateAlgoliaConfigFile := Def.taskDyn {
-      val algoliaConfigFileName = docusaurAlgoliaConfigFileName.value
-      val algoliaConfigPath = docusaurDir.value / algoliaConfigFileName
+      val algoliaConfigFilename = docusaurAlgoliaConfigFilename.value
+      val algoliaConfigPath = docusaurDir.value / algoliaConfigFilename
       val algoliaApiKey = docusaurAlgoliaApiKey.value
       val algoliaIndexName = docusaurAlgoliaIndexName.value
 
