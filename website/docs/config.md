@@ -121,6 +121,34 @@ gitHubPagesRepoName := "sbt-docusaur"
 
 ## More Settings
 
-:::caution NOTE
-To be added...
-:::
+### `npm` Path
+
+| Name              | Value Type     | Default |
+| ----------------- | -------------- | ------- |
+| `docusaurNpmPath` | `Option[File]` | `None`  |
+This is a setting key to specify the path to `npm`. By default, it uses npm found in the `PATH` env var.
+So you don't need to specify it unless you want to use `npm` from some other path.
+
+
+### Algolia Config Filename (Optional) 
+| Name                            | Value Type | Default                                                               |
+| ------------------------------- | ---------- | --------------------------------------------------------------------- |
+| `docusaurAlgoliaConfigFilename` | `String`   | `sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json")` |
+
+The name of Algolia config file.
+
+
+### Algolia ApiKey (Optional)
+| Name                    | Value Type       | Default                          |
+| ----------------------- | ---------------- | -------------------------------- |
+| `docusaurAlgoliaApiKey` | `Option[String]` | `sys.env.get("ALGOLIA_API_KEY")` |
+
+Algolia API Key. If missing, Algolia config with an empty object (`{}`) is created.
+
+
+### Algolia Index Name (Optional)
+| Name                       | Value Type       | Default                             |
+| -------------------------- | ---------------- | ----------------------------------- |
+| `docusaurAlgoliaIndexName` | `Option[String]` | `sys.env.get("ALGOLIA_INDEX_NAME")` |
+
+Algolia index name. If missing, Algolia config with an empty object (`{}`) is created.
