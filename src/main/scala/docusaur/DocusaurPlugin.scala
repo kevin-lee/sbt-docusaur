@@ -6,7 +6,7 @@ import cats.effect._
 import docusaur.npm.{Npm, NpmCmd}
 import githubpages.GitHubPagesPlugin
 import githubpages.GitHubPagesPlugin.{autoImport => ghpg}
-import loggerf.sbt.SbtLogger2
+import loggerf.sbt.SbtLogger
 import sbt.Keys.streams
 import sbt._
 import sbt.util.Logger
@@ -31,7 +31,7 @@ object DocusaurPlugin extends AutoPlugin {
       case Some(logF) =>
         logF
       case None =>
-        val logF = SbtLogger2.sbtLogger(logger)
+        val logF = SbtLogger.sbtLogger(logger)
         Option(internalLogger.putIfAbsent("Logger", logF)).fold(logF)(identity)
     }
   }
