@@ -18,13 +18,14 @@ object Npm {
 
   def execute[F[_]: EffectConstructor: Monad, A](
     baseDir: Option[File],
-    commands: List[String]
+    command: String,
+    commands: String*
   )(
     resultHandler: List[String] => A
   ): F[Either[NpmError, A]] =
     (for {
       sysCommand <- eitherTRight[F, NpmError](
-        SysProcess.singleSysProcess(baseDir = baseDir, commands)
+        SysProcess.singleSysProcess(baseDir = baseDir, command, commands:_*)
       )
       processResult <- eitherTRight(SysProcess.run(sysCommand))
       result <- eitherTOfPure(
@@ -34,8 +35,17 @@ object Npm {
 
           case ProcessResult.Failure(code, errors) =>
             NpmError.npmCmdError(
-              commands, NpmError.ErrorCode(code), errors
+              command :: commands.toList,
+              NpmError.ErrorCode(code),
+              errors
             ).asLeft[A]
+
+          case ProcessResult.FailureWithNonFatal(nonFatalThrowable) =>
+            NpmError.npmCmdNonFatal(
+              command :: commands.toList,
+              nonFatalThrowable
+            ).asLeft[A]
+
         })
     } yield result).value
 
@@ -45,7 +55,7 @@ object Npm {
   def version[F[_]: EffectConstructor: Monad](
     npmPath: Option[NpmPath]
   ): F[Either[NpmError, String]] =
-    execute(none, npm(npmPath) :: "--version" :: Nil)(_.mkString)
+    execute(none, npm(npmPath), "--version")(_.mkString)
 
   def run[F[_]: EffectConstructor: Monad](
     npmPath: Option[NpmPath],
@@ -54,7 +64,8 @@ object Npm {
   ): F[Either[NpmError, List[String]]] =
     execute(
       baseDir,
-      npm(npmPath) :: NpmCmd.values(npmCmd)
+      npm(npmPath),
+      NpmCmd.values(npmCmd):_*
     )(identity)
 
 }
