@@ -30,7 +30,8 @@ val http4sDsl: ModuleID = "org.http4s" %% "http4s-dsl" % http4sVersion
 val http4sClient: ModuleID = "org.http4s" %% "http4s-blaze-client" % http4sVersion
 
 val effectie: ModuleID = "io.kevinlee" %% "effectie-cats-effect" % "1.0.0"
-val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % "0.3.1"
+val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % "0.4.0"
+val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging" % "0.4.0"
 
 val GitHubUsername: String = "Kevin-Lee"
 val ProjectName: String = "sbt-docusaur"
@@ -72,7 +73,16 @@ lazy val root = (project in file("."))
   , addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full)
   , addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
   , libraryDependencies ++=
-      Seq(cats, catsEffect, github4s, http4sDsl, http4sClient, effectie, loggerFCatsEffect) ++ hedgehogLibs
+      Seq(
+        cats,
+        catsEffect,
+        github4s,
+        http4sDsl,
+        http4sClient,
+        effectie,
+        loggerFCatsEffect,
+        loggerFSbtLogging,
+      ) ++ hedgehogLibs
   , testFrameworks ++= Seq(TestFramework("hedgehog.sbt.Framework"))
 
   , addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.1.2")
