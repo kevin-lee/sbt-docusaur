@@ -1,5 +1,7 @@
 package docusaur.npm
 
+import errors.StackTraceToString
+
 /**
  * @author Kevin Lee
  * @since 2020-06-23
@@ -12,6 +14,15 @@ object NpmError {
     errorCode: ErrorCode,
     errors: List[String]
   ) extends NpmError
+
+  final case class NpmCmdNonFatal(
+    commands: List[String],
+    throwable: Throwable
+  ) extends NpmError
+
+  def npmCmdNonFatal(commands: List[String], throwable: Throwable): NpmError =
+    NpmCmdNonFatal(commands, throwable)
+
 
   final case class ErrorCode(errorCode: Int) extends AnyVal
 
@@ -29,6 +40,12 @@ object NpmError {
          |  command: ${commands.mkString(" ")}
          |  Error Code: $errorCode
          |  Error: ${errors.mkString("\n  - ", "\n  - ", "\n")}
+         |""".stripMargin
+
+    case NpmCmdNonFatal(commands, throwable) =>
+      s"""NonFatal Throwable when running the following command
+         |  command: ${commands.mkString(" ")}
+         |  Error: ${StackTraceToString.render(throwable)}
          |""".stripMargin
   }
 

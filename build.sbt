@@ -33,6 +33,8 @@ val effectie: ModuleID = "io.kevinlee" %% "effectie-cats-effect" % "1.0.0"
 val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % "0.4.0"
 val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging" % "0.4.0"
 
+val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % "0.1.0"
+
 val GitHubUsername: String = "Kevin-Lee"
 val ProjectName: String = "sbt-docusaur"
 
@@ -82,6 +84,7 @@ lazy val root = (project in file("."))
         effectie,
         loggerFCatsEffect,
         loggerFSbtLogging,
+        justSysProcess
       ) ++ hedgehogLibs
   , testFrameworks ++= Seq(TestFramework("hedgehog.sbt.Framework"))
 
