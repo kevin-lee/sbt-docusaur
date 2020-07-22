@@ -4,10 +4,12 @@ import java.io.File
 import java.nio.charset.Charset
 
 import cats._
+import cats.data.EitherT
 import cats.implicits._
 import docusaur.npm.Npm.NpmPath
 import docusaur.npm.{Npm, NpmCmd, NpmError}
 import effectie.Effectful._
+import effectie.cats.EitherTSupport._
 import effectie.cats.{CanCatch, EffectConstructor}
 import filef.{FileError2, FileF2}
 import loggerf.cats.Log.LeveledMessage._
@@ -21,36 +23,24 @@ import sbt.{IO => SbtIo}
  */
 object Docusaur {
 
-  def deleteFilesIn[F[_]: EffectConstructor: CanCatch: LogF: Monad](
+  def deleteFilesIn[F[_]: EffectConstructor: CanCatch: Monad](
     what: String,
     file: File
-  ): F[Unit] =
-    log(FileF2.deleteAllIn[F](file))(
-      err => error(
-        s"""Failed in deleting all files in ${file.getCanonicalPath} for $what
-           |  Error: ${FileError2.render(err)}
-           |""".stripMargin
-      ),
-      files => info(
-        s"""The following files are removed from ${file.getCanonicalPath}
-           |${files.mkString("    ", "\n    ", "\n")}
-           |""".stripMargin
-      )
-    ) *> effectOfUnit
+  ): F[Either[FileError2, List[String]]] =
+    FileF2.deleteAllIn[F](file)
 
   def install[F[_]: EffectConstructor: CanCatch: LogF: Monad](
-    what: String,
     npmPath: Option[NpmPath],
     docusaurusDir: File
-  ): F[Unit] =
-    runNpm("Docusaurus install", npmPath, docusaurusDir, NpmCmd.install)
+  ): F[Either[NpmError, Unit]] =
+    runAndLogNpm("Docusaurus install", npmPath, docusaurusDir, NpmCmd.install)
 
   def runBuild[F[_]: EffectConstructor: CanCatch: LogF: Monad](
     what: String,
     npmPath: Option[NpmPath],
     docusaurusDir: File
-  ): F[Unit] =
-    runNpm(
+  ): F[Either[NpmError, Unit]] =
+    runAndLogNpm(
       what,
       npmPath,
       docusaurusDir,
@@ -58,27 +48,22 @@ object Docusaur {
     )
 
 
-  def runNpm[F[_]: EffectConstructor: CanCatch: LogF: Monad](
+  def runAndLogNpm[F[_]: EffectConstructor: CanCatch: LogF: Monad](
     what: String,
     npmPath: Option[NpmPath],
     path: File,
     npmCmd: NpmCmd
-  ): F[Unit] =
-    log(Npm.run[F](npmPath, path.some, npmCmd))(
-      err => error(
-        s"""Error when run npm for $what at ${path.getCanonicalPath}
-           |${NpmError.render(err)}
+  ): F[Either[NpmError, Unit]] = (for {
+    result <-  EitherT(
+        Npm.run[F](npmPath, path.some, npmCmd)
+      )
+    _ <- eitherTRight[F, NpmError](LogF[F].logger0.info(
+        s"""Successfully run npm for $what
+           |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
+           |${result.mkString("  ", "\n  ", "\n")}
            |""".stripMargin
-      ),
-      result =>
-        info(
-          s"""Successfully run npm for $what
-             |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
-             |${result.mkString("  ", "\n  ", "\n")}
-             |""".stripMargin
-        )
-    ) *> effectOfUnit
-
+      ))
+  } yield ()).value
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
   def logAndWriteFile[F[_]: EffectConstructor: LogF: Monad](
