@@ -2,8 +2,11 @@ package docusaur
 
 import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
 
+import cats.data.EitherT
 import cats.effect._
-import docusaur.npm.{Npm, NpmCmd}
+import docusaur.npm.{Npm, NpmCmd, NpmError}
+import effectie.cats.EitherTSupport._
+import filef.FileError2
 import githubpages.GitHubPagesPlugin
 import githubpages.GitHubPagesPlugin.{autoImport => ghpg}
 import loggerf.sbt.SbtLogger
@@ -36,23 +39,37 @@ object DocusaurPlugin extends AutoPlugin {
     }
   }
 
+  def toFileRemovalMessage(file: File, files: List[String]): String =
+    s"""The following files are removed from ${file.getCanonicalPath}
+       |${files.mkString("    ", "\n    ", "\n")}
+       |""".stripMargin
+
+  @SuppressWarnings(Array("org.wartremover.warts.Throw"))
+  def returnOrThrowMessageOnlyException[A, B](aOrB: Either[A, B])(aToString: A => String): B =
+    aOrB.fold(a => throw new MessageOnlyException(aToString(a)), identity)
+
 
   override lazy val projectSettings: Seq[Def.Setting[_]] = Seq(
 
     docusaurNpmPath := none[File],
 
     docusaurCleanNodeModules := Def.taskDyn {
-      @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
-      implicit val logF = loggerFLogger(streams.value.log)
+      val log = streams.value.log
       val nodeModulesPath = docusaurDir.value / "node_modules"
         if (nodeModulesPath.exists()) {
           Def.task(
-            Docusaur.deleteFilesIn[IO]("'clean node_modules'", nodeModulesPath)
-              .unsafeRunSync()
+            returnOrThrowMessageOnlyException(
+              (for {
+                files <- EitherT(Docusaur.deleteFilesIn[IO]("'clean node_modules'", nodeModulesPath))
+                _ <- eitherTRight[IO, FileError2](log.info(toFileRemovalMessage(nodeModulesPath, files)))
+             } yield ())
+                .value
+                .unsafeRunSync()
+            )(FileError2.render)
           )
         } else {
           Def.task {
-            logF.info(s"node_modules does not exist at ${nodeModulesPath.getCanonicalPath}")
+            log.info(s"node_modules does not exist at ${nodeModulesPath.getCanonicalPath}")
             ()
           }
         }
@@ -64,8 +81,10 @@ object DocusaurPlugin extends AutoPlugin {
       val docusaurusDir = docusaurDir.value
       val npmPath = docusaurNpmPath.value.map(Npm.NpmPath)
       Def.task(
-        Docusaur.runNpm[IO]("Docusaurus install", npmPath, docusaurusDir, NpmCmd.install)
-          .unsafeRunSync()
+        returnOrThrowMessageOnlyException(
+          Docusaur.install[IO](npmPath, docusaurusDir)
+            .unsafeRunSync()
+        )(NpmError.render)
       )
     }.value,
 
@@ -75,8 +94,14 @@ object DocusaurPlugin extends AutoPlugin {
       val buildPath = docusaurBuildDir.value
       if (buildPath.exists()) {
         Def.task(
-          Docusaur.deleteFilesIn[IO]("'clean the Docusaurus build dir'", buildPath)
-            .unsafeRunSync()
+          returnOrThrowMessageOnlyException(
+            (for {
+              files <- EitherT(Docusaur.deleteFilesIn[IO] ("'clean the Docusaurus build dir'", buildPath))
+              _ <- eitherTRight[IO, FileError2](streams.value.log.info(toFileRemovalMessage(buildPath, files)))
+            } yield ())
+              .value
+              .unsafeRunSync()
+          )(FileError2.render)
         )
       } else {
         Def.task {
@@ -92,13 +117,15 @@ object DocusaurPlugin extends AutoPlugin {
       val docusaurusDir = docusaurDir.value
       val npmPath = docusaurNpmPath.value.map(Npm.NpmPath)
       Def.task(
-        Docusaur.runNpm[IO](
-          "Docusaurus build",
-          npmPath,
-          docusaurusDir,
-          NpmCmd.run(NpmCmd.Run.Param.build)
-        )
-        .unsafeRunSync()
+        returnOrThrowMessageOnlyException(
+          Docusaur.runAndLogNpm[IO](
+            "Docusaurus build",
+            npmPath,
+            docusaurusDir,
+            NpmCmd.run(NpmCmd.Run.Param.build)
+          )
+          .unsafeRunSync()
+        )(NpmError.render)
       )
     }.value,
 
