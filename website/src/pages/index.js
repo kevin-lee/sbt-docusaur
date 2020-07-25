@@ -9,16 +9,17 @@ import styles from './styles.module.css';
 const features = [
   {
     title: <>Easy to Setup</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/docusaurus.svg',
     description: (
       <>
-        sbt-docusaur was designed to publish website built with Docusaurus to GitHub Pages with minimal effort.
+        sbt-docusaur was designed to publish website built with Docusaurus
+        to GitHub Pages with minimal effort.
       </>
     ),
   },
   {
     title: <>Works Well with GitHub Actions</>,
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    imageUrl: 'img/github.svg',
     description: (
       <>
         Easy to publish Docusaurus website to GitHub Pages through GitHub Actions.
@@ -27,7 +28,7 @@ const features = [
   },
   {
     title: <>Written in FP Scala</>,
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    imageUrl: 'img/lambda.svg',
     description: (
       <>
         Written in FP Scala yet you probably don't care. 🙂

@@ -11,6 +11,7 @@ sbt plugin for Docusaurus
 [![Release Status](https://github.com/Kevin-Lee/sbt-docusaur/workflows/Release/badge.svg)](https://github.com/Kevin-Lee/sbt-docusaur/actions?workflow=Release)
 [ ![Download](https://api.bintray.com/packages/kevinlee/sbt-plugins/sbt-docusaur/images/download.svg) ](https://bintray.com/kevinlee/sbt-plugins/sbt-docusaur/_latestVersion)
 
+![Cats Friendly Badge](https://typelevel.org/cats/img/cats-badge-tiny.png)
 
 In the `project/plugins.sbt`, add the following line,
 ```scala
