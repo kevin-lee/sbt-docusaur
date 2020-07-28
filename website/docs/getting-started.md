@@ -15,7 +15,7 @@ sbt plugin for Docusaurus
 
 In the `project/plugins.sbt`, add the following line,
 ```scala
-addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.1.3")
+addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.1.4")
 ```
 
 In your `build.sbt`,
