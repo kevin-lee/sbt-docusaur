@@ -6,7 +6,7 @@ import sbt.ScmInfo
 val ProjectScalaVersion: String = "2.12.12"
 val CrossScalaVersions: Seq[String] = Seq(ProjectScalaVersion)
 
-val GlobalSbtVersion: String = "1.3.12"
+val GlobalSbtVersion: String = "1.3.13"
 
 val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
