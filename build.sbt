@@ -3,7 +3,7 @@ import kevinlee.sbt.SbtCommon._
 import just.semver.SemVer
 import sbt.ScmInfo
 
-val ProjectScalaVersion: String = "2.12.11"
+val ProjectScalaVersion: String = "2.12.12"
 val CrossScalaVersions: Seq[String] = Seq(ProjectScalaVersion)
 
 val GlobalSbtVersion: String = "1.3.12"
