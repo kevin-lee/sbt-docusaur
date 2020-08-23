@@ -41,7 +41,7 @@ Check out the [Docusuarus docs](https://v2.docusaurus.io/docs/) and finish confi
 ### Mdoc + Docusaurus 2
 Add `sbt-mdoc` plugin and `sbt-docusaur` to `project/plugins.sbt`. 
 
-```scala
+```scala title="project/plugins.sbt"
 addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.2.3" )
 
 addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.1.4")
@@ -50,7 +50,7 @@ addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.1.4")
 In your `build.sbt`, add a sub-project for the doc site with `sbt-mdoc` and `sbt-docusaur`, and set up the Docusarus.
 
 e.g.)
-```scala
+```scala title="build.sbt"
 lazy val noPublish = Seq(
   publish := {},
   publishLocal := {},
@@ -85,7 +85,7 @@ docs: {
 So it may look like,
 
 e.g.)
-```javascript
+```javascript title="website/docusaurus.config.js"
 module.exports = {
   // ...
 
@@ -112,7 +112,9 @@ Whenever push happens on the `master` branch, it publishes the website. <br />
 It uses Mdoc to generate the Markdown files with the Scala code compiled and run.<br />
 After that it builds Docusarus website then publish to `github-pages`.
 
-```yaml
+e.g.)
+
+```yaml title=".github/workflows/publish-github-pages.yml"
 name: Publish GitHub Pages
 
 on:
