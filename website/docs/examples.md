@@ -3,7 +3,7 @@ id: examples
 title: Examples
 ---
 ## Publish Website to GitHub Pages
-To publish your website to GitHub Actions, first, make sure you have `github-pages` branch.
+To publish your website to GitHub Actions, first, make sure you have `gh-pages` branch.
 If you don't already have it, create it first.
 
 ```shell
@@ -110,7 +110,7 @@ Just place the following yaml file in `YOUR_PROJECT/.github/workflows/`
 
 Whenever push happens on the `master` branch, it publishes the website. <br />
 It uses Mdoc to generate the Markdown files with the Scala code compiled and run.<br />
-After that it builds Docusarus website then publish to `github-pages`.
+After that it builds Docusarus website then publish to `gh-pages`.
 
 e.g.)
 
