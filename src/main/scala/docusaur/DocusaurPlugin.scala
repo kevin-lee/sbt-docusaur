@@ -29,7 +29,7 @@ object DocusaurPlugin extends AutoPlugin {
   private val internalLogger: ConcurrentMap[String, loggerf.Logger] =
     new ConcurrentHashMap(1)
 
-  def loggerFLogger(logger: Logger): loggerf.Logger = {
+  def loggerFLogger(logger: Logger): loggerf.Logger =
     Option(internalLogger.get("Logger")) match {
       case Some(logF) =>
         logF
@@ -37,7 +37,6 @@ object DocusaurPlugin extends AutoPlugin {
         val logF = SbtLogger.sbtLogger(logger)
         Option(internalLogger.putIfAbsent("Logger", logF)).fold(logF)(identity)
     }
-  }
 
   def toFileRemovalMessage(file: File, files: List[String]): String =
     s"""The following files are removed from ${file.getCanonicalPath}
@@ -45,7 +44,11 @@ object DocusaurPlugin extends AutoPlugin {
        |""".stripMargin
 
   @SuppressWarnings(Array("org.wartremover.warts.Throw"))
-  def returnOrThrowMessageOnlyException[A, B](aOrB: Either[A, B])(aToString: A => String): B =
+  def returnOrThrowMessageOnlyException[A, B](
+    aOrB: Either[A, B]
+  )(
+    aToString: A => String
+  ): B =
     aOrB.fold(a => throw new MessageOnlyException(aToString(a)), identity)
 
 
