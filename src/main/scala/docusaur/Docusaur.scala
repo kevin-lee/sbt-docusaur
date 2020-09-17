@@ -67,7 +67,7 @@ object Docusaur {
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
   def logAndWriteFile[F[_]: EffectConstructor: LogF: Monad](
-    algoliaConfigFile: File,
+    theFile: File,
     content: String
   )(
     logMessage: String
@@ -75,7 +75,7 @@ object Docusaur {
     log(effectOfPure(logMessage))(info) *>
       effectOf(
         SbtIo.write(
-          algoliaConfigFile,
+          theFile,
           content,
           Charset.forName("UTF-8"),
           append = false
@@ -147,4 +147,84 @@ object Docusaur {
              |""".stripMargin
         )
     }
+
+  def createGoogleAnalyticsConfig[F[_]: EffectConstructor: LogF: Monad](
+    googleAnalyticsConfigPath: File,
+    googleAnalyticsTrackingId: Option[String],
+    googleAnalyticsAnonymizeIp: Option[Boolean]
+  ): F[Unit] =
+    (googleAnalyticsTrackingId, googleAnalyticsAnonymizeIp) match {
+      case (Some(trackingId), Some(false)) =>
+        if (trackingId.isEmpty)
+          logAndWriteFile(googleAnalyticsConfigPath, "{}")(
+            s"""The Google Analytics config info is found in environment variables but the tracking ID value is empty.
+               |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
+               |""".stripMargin
+          )
+        else
+          logAndWriteFile(
+            googleAnalyticsConfigPath
+            , s"""{
+                 |  "trackingID": "$trackingId",
+                 |  "anonymizeIP": false
+                 |}
+                 |""".stripMargin)(
+            s"""The Google Analytics config info is found so the Google Analytics config file will be generated at $googleAnalyticsConfigPath
+               |""".stripMargin
+          )
+
+      case (Some(trackingId), Some(true)) =>
+        if (trackingId.isEmpty)
+          logAndWriteFile(googleAnalyticsConfigPath, "{}")(
+            s"""The Google Analytics config info is found in environment variables but the tracking ID value is empty.
+               |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
+               |""".stripMargin
+          )
+        else
+          logAndWriteFile(
+            googleAnalyticsConfigPath
+            , s"""{
+                 |  "trackingID": "$trackingId",
+                 |  "anonymizeIP": true
+                 |}
+                 |""".stripMargin)(
+            s"""The Google Analytics config info is found so the Google Analytics config file will be generated at $googleAnalyticsConfigPath
+               |""".stripMargin
+          )
+
+      case (Some(trackingId), None) =>
+        logAndWriteFile(
+          googleAnalyticsConfigPath
+          , s"""{
+               |  "trackingID": "$trackingId"
+               |}
+               |""".stripMargin)(
+          s"""The Google Analytics tracking ID is found but no anonymizeIP config value is found in the environment variables.
+             |So It will create the Google Analytics config file with 'trackingID' without 'anonymizeIP' at $googleAnalyticsConfigPath
+             |If you want to set up anonymizeIP, set the following env var.
+             |  - GA_ANONYMIZE_IP
+             |""".stripMargin
+        )
+
+      case (None, Some(_)) =>
+        logAndWriteFile(googleAnalyticsConfigPath, "{}")(
+          s"""The Google Analytics is partially found in the environment variables.
+             |It has anonymize IP option but no tracking ID.
+             |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
+             |If you want to set up Google Analytics, set the following env var.
+             |  - GA_TRACKING_ID
+             |""".stripMargin
+        )
+
+      case (None, None) =>
+        logAndWriteFile(googleAnalyticsConfigPath, "{}")(
+          s"""No Google Analytics (Optional) config info has been found in the environment variables.
+             |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
+             |If you want to set up Google Analytics, set the following env vars.
+             |  - GA_TRACKING_ID
+             |  - GA_ANONYMIZE_IP
+             |""".stripMargin
+        )
+    }
+
 }

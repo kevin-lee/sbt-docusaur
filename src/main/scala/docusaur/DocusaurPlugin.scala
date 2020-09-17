@@ -11,7 +11,7 @@ import githubpages.GitHubPagesPlugin
 import githubpages.GitHubPagesPlugin.{autoImport => ghpg}
 import loggerf.sbt.SbtLogger
 import sbt.Keys.streams
-import sbt._
+import sbt.{IO => _, _}
 import sbt.util.Logger
 
 /**
@@ -149,6 +149,38 @@ object DocusaurPlugin extends AutoPlugin {
           algoliaConfigPath,
           algoliaApiKey,
           algoliaIndexName
+        )
+        .unsafeRunSync()
+      )
+
+    }.value,
+
+    docusaurGoogleAnalyticsConfigFilename :=
+      sys.env.getOrElse("GA_CONFIG_FILENAME", "google-analytics.config.json"),
+    docusaurGoogleAnalyticsTrackingId := sys.env.get("GA_TRACKING_ID"),
+    docusaurGoogleAnalyticsAnonymizeIp := {
+        returnOrThrowMessageOnlyException(
+          IO(sys.env.get("GA_ANONYMIZE_IP")).map(_.map(_.toBoolean)).attempt.unsafeRunSync()
+        )(err =>
+          s"""Invalid GA_ANONYMIZE_IP value. It must be either true or false.
+             |Error: $err
+             |""".stripMargin
+        )
+      },
+
+    docusaurGenerateGoogleAnalyticsConfigFile := Def.taskDyn {
+      val googleAnalyticsConfigFilename = docusaurGoogleAnalyticsConfigFilename.value
+      val googleAnalyticsConfigPath = docusaurDir.value / googleAnalyticsConfigFilename
+      val googleAnalyticsTrackingId = docusaurGoogleAnalyticsTrackingId.value
+      val googleAnalyticsAnonymizeIp = docusaurGoogleAnalyticsAnonymizeIp.value
+
+      @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
+      implicit val logF = loggerFLogger(streams.value.log)
+      Def.task(
+        Docusaur.createGoogleAnalyticsConfig[IO](
+          googleAnalyticsConfigPath,
+          googleAnalyticsTrackingId,
+          googleAnalyticsAnonymizeIp
         )
         .unsafeRunSync()
       )
