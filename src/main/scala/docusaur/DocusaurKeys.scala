@@ -58,4 +58,17 @@ trait DocusaurKeys {
 
   lazy val docusaurGenerateAlgoliaConfigFile: TaskKey[Unit] =
     taskKey[Unit]("Generate the Algolia config file at docusaurDir.value")
+
+  lazy val docusaurGoogleAnalyticsConfigFilename: SettingKey[String] =
+    settingKey[String]("""The name of Google Analytics config file (default: sys.env.getOrElse("GA_CONFIG_FILENAME", "google-analytics.config.json"))""")
+
+  lazy val docusaurGoogleAnalyticsTrackingId: SettingKey[Option[String]] =
+    settingKey[Option[String]]("""Google Analytics Tracking ID. If None, Google Analytics config with an empty object is created. (default: sys.env.get("GA_TRACKING_ID") )""")
+
+  lazy val docusaurGoogleAnalyticsAnonymizeIp: SettingKey[Option[Boolean]] =
+    settingKey[Option[Boolean]]("""Google Analytics option to anonymize IP. If None, the Google Analytics config will not have the `anonymizeIP` field. (default: sys.env.get("GA_ANONYMIZE_IP") )""")
+
+  lazy val docusaurGenerateGoogleAnalyticsConfigFile: TaskKey[Unit] =
+    taskKey[Unit]("Generate the Google Analytics config file at docusaurDir.value")
+
 }
