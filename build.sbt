@@ -10,7 +10,7 @@ val GlobalSbtVersion: String = "1.3.13"
 
 val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
-val hedgehogVersion: String = "bd4e0cc785915e0af20d2a7ead5267d49b1de7b1"
+val hedgehogVersion: String = "0.5.1"
 
 val hedgehogRepo: Resolver =
   "bintray-scala-hedgehog" at "https://dl.bintray.com/hedgehogqa/scala-hedgehog"
@@ -21,19 +21,19 @@ val hedgehogLibs: Seq[ModuleID] = Seq(
   , "qa.hedgehog" %% "hedgehog-sbt" % hedgehogVersion % Test
   )
 
-val cats: ModuleID = "org.typelevel" %% "cats-core" % "2.1.1"
-val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % "2.1.3"
-val github4s: ModuleID = "com.47deg" %% "github4s" % "0.24.0"
+val cats: ModuleID = "org.typelevel" %% "cats-core" % "2.2.0"
+val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % "2.2.0"
+val github4s: ModuleID = "com.47deg" %% "github4s" % "0.25.0"
 
-val http4sVersion: String = "0.21.3"
+val http4sVersion: String = "0.21.6"
 val http4sDsl: ModuleID = "org.http4s" %% "http4s-dsl" % http4sVersion
 val http4sClient: ModuleID = "org.http4s" %% "http4s-blaze-client" % http4sVersion
 
-val effectie: ModuleID = "io.kevinlee" %% "effectie-cats-effect" % "1.0.0"
-val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % "0.4.0"
-val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging" % "0.4.0"
+val effectie: ModuleID = "io.kevinlee" %% "effectie-cats-effect" % "1.3.0"
+val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % "1.3.1"
+val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging" % "1.3.1"
 
-val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % "0.1.0"
+val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % "0.2.0"
 
 val GitHubUsername: String = "Kevin-Lee"
 val ProjectName: String = "sbt-docusaur"
