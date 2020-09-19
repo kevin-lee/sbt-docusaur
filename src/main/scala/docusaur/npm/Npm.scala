@@ -24,7 +24,7 @@ object Npm {
     resultHandler: List[String] => A
   ): F[Either[NpmError, A]] =
     (for {
-      sysCommand <- eitherTRight[F, NpmError](
+      sysCommand <- eitherTRight[NpmError](
         SysProcess.singleSysProcess(baseDir = baseDir, command, commands:_*)
       )
       processResult <- eitherTRight(SysProcess.run(sysCommand))

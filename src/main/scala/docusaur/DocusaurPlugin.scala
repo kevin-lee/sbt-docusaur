@@ -9,7 +9,7 @@ import effectie.cats.EitherTSupport._
 import filef.FileError2
 import githubpages.GitHubPagesPlugin
 import githubpages.GitHubPagesPlugin.{autoImport => ghpg}
-import loggerf.sbt.SbtLogger
+import loggerf.logger._
 import sbt.Keys.streams
 import sbt.{IO => _, _}
 import sbt.util.Logger
@@ -26,15 +26,15 @@ object DocusaurPlugin extends AutoPlugin {
   object autoImport extends DocusaurKeys
   import autoImport._
 
-  private val internalLogger: ConcurrentMap[String, loggerf.Logger] =
+  private val internalLogger: ConcurrentMap[String, CanLog] =
     new ConcurrentHashMap(1)
 
-  def loggerFLogger(logger: Logger): loggerf.Logger =
+  def loggerFLogger(logger: Logger): CanLog =
     Option(internalLogger.get("Logger")) match {
       case Some(logF) =>
         logF
       case None =>
-        val logF = SbtLogger.sbtLogger(logger)
+        val logF = SbtLogger.sbtLoggerCanLog(logger)
         Option(internalLogger.putIfAbsent("Logger", logF)).fold(logF)(identity)
     }
 
@@ -64,7 +64,7 @@ object DocusaurPlugin extends AutoPlugin {
             returnOrThrowMessageOnlyException(
               (for {
                 files <- EitherT(Docusaur.deleteFilesIn[IO]("'clean node_modules'", nodeModulesPath))
-                _ <- eitherTRight[IO, FileError2](log.info(toFileRemovalMessage(nodeModulesPath, files)))
+                _ <- eitherTRight[FileError2][IO, Unit](log.info(toFileRemovalMessage(nodeModulesPath, files)))
              } yield ())
                 .value
                 .unsafeRunSync()
@@ -100,7 +100,9 @@ object DocusaurPlugin extends AutoPlugin {
           returnOrThrowMessageOnlyException(
             (for {
               files <- EitherT(Docusaur.deleteFilesIn[IO] ("'clean the Docusaurus build dir'", buildPath))
-              _ <- eitherTRight[IO, FileError2](streams.value.log.info(toFileRemovalMessage(buildPath, files)))
+              _ <- eitherTRight[FileError2][IO, Unit](
+                  streams.value.log.info(toFileRemovalMessage(buildPath, files))
+                )
             } yield ())
               .value
               .unsafeRunSync()

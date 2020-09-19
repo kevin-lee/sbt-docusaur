@@ -36,7 +36,7 @@ object FileF2 {
       filesDeleted <-
           allFiles.traverse(file =>
             EitherT(
-              catchNonFatal[F, FileError2](
+              catchNonFatal[F](
                 effectOf(file.delete()) *> effectOf(file.getCanonicalPath)
               )(
                 throwable => FileError2.inDeletion(file, throwable)
