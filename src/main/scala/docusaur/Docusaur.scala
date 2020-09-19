@@ -12,8 +12,8 @@ import effectie.Effectful._
 import effectie.cats.EitherTSupport._
 import effectie.cats.{CanCatch, EffectConstructor}
 import filef.{FileError2, FileF2}
-import loggerf.cats.Log.LeveledMessage._
-import loggerf.cats.Logful._
+import loggerf.cats._
+import loggerf.syntax._
 import loggerf.cats.{Log => LogF}
 import sbt.{IO => SbtIo}
 
@@ -57,12 +57,14 @@ object Docusaur {
     result <-  EitherT(
         Npm.run[F](npmPath, path.some, npmCmd)
       )
-    _ <- eitherTRight[F, NpmError](LogF[F].logger0.info(
-        s"""Successfully run npm for $what
-           |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
-           |${result.mkString("  ", "\n  ", "\n")}
-           |""".stripMargin
-      ))
+    _ <- eitherTRightF[NpmError](
+        log(effectOfPure(
+          s"""Successfully run npm for $what
+             |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
+             |${result.mkString("  ", "\n  ", "\n")}
+             |""".stripMargin
+        ))(info)
+      )
   } yield ()).value
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
