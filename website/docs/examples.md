@@ -42,9 +42,9 @@ Check out the [Docusuarus docs](https://v2.docusaurus.io/docs/) and finish confi
 Add `sbt-mdoc` plugin and `sbt-docusaur` to `project/plugins.sbt`. 
 
 ```scala title="project/plugins.sbt"
-addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.2.3" )
+addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.2.9" )
 
-addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.1.4")
+addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.2.1")
 ```
 
 In your `build.sbt`, add a sub-project for the doc site with `sbt-mdoc` and `sbt-docusaur`, and set up the Docusarus.
@@ -170,11 +170,14 @@ jobs:
         env:
           ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
           ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
+          GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
+          GA_ANONYMIZE_IP: ${{ secrets.GA_ANONYMIZE_IP }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           sbt clean \
             docs/mdoc \
             docs/docusaurGenerateAlgoliaConfigFile \
+            docs/docusaurGenerateGoogleAnalyticsConfigFile \
             docs/docusaurInstall \
             docs/docusaurCleanBuild \
             docs/docusaurBuild \
