@@ -159,10 +159,17 @@ object DocusaurPlugin extends AutoPlugin {
 
     docusaurGoogleAnalyticsConfigFilename :=
       sys.env.getOrElse("GA_CONFIG_FILENAME", "google-analytics.config.json"),
-    docusaurGoogleAnalyticsTrackingId := sys.env.get("GA_TRACKING_ID"),
+    docusaurGoogleAnalyticsTrackingId := sys.env.get("GA_TRACKING_ID").map(_.trim).filter(_.nonEmpty),
     docusaurGoogleAnalyticsAnonymizeIp := {
         returnOrThrowMessageOnlyException(
-          IO(sys.env.get("GA_ANONYMIZE_IP")).map(_.map(_.toBoolean)).attempt.unsafeRunSync()
+          IO(
+            sys.env.get("GA_ANONYMIZE_IP")
+              .map(_.trim)
+              .filter(_.nonEmpty)
+              .map(_.toBoolean)
+          )
+          .attempt
+          .unsafeRunSync()
         )(err =>
           s"""Invalid GA_ANONYMIZE_IP value. It must be either true or false.
              |Error: $err
