@@ -152,3 +152,99 @@ Algolia API Key. If missing, Algolia config with an empty object (`{}`) is creat
 | `docusaurAlgoliaIndexName` | `Option[String]` | `sys.env.get("ALGOLIA_INDEX_NAME")` |
 
 Algolia index name. If missing, Algolia config with an empty object (`{}`) is created.
+
+
+### Google Analytics Config File (Optional)
+| Name                                    | Value Type | Default                                                                   |
+| --------------------------------------- | ---------- | ------------------------------------------------------------------------- |
+| `docusaurGoogleAnalyticsConfigFilename` | `String`   | `sys.env.getOrElse("GA_CONFIG_FILENAME", "google-analytics.config.json")` |
+
+### Google Analytics  (Optional)
+| Name                                | Value Type       | Default                               |
+| ----------------------------------- | ---------------- | ------------------------------------- |
+| `docusaurGoogleAnalyticsTrackingId` | `Option[String]` | `sys.env.getOrElse("GA_TRACKING_ID")` |
+
+Google Analytics Tracking ID. If missing, Google Analytics config with an empty object (`{}`) is created.
+
+
+### Google Analytics  (Optional)
+| Name                                 | Value Type        | Default                                |
+| ------------------------------------ | ----------------- | -------------------------------------- |
+| `docusaurGoogleAnalyticsAnonymizeIp` | `Option[Boolean]` | `sys.env.getOrElse("GA_ANONYMIZE_IP")` |
+
+If missing, no `anonymizeIP` is written in the config file.
+
+
+## Use GitHub Enterprise
+`sbt-github-pages` support GitHub Enterprise
+
+There are four properties can be used to use GitHub Enterprise. 
+To set these up, get the right values from your company.
+* `gitHubPagesGitHubBaseUrl`
+* `gitHubPagesGitHubAuthorizeUrl`
+* `gitHubPagesGitHubAccessTokenUrl`
+* `gitHubPagesGitHubHeaders`
+
+### GitHub Enterprise - Base URL
+| Name                       | Value Type | Default                                                    |
+| -------------------------- | ---------- | ---------------------------------------------------------- |
+| `gitHubPagesGitHubBaseUrl` | `String`   | ENV VAR `GITHUB_ENT_BASE_URL` or `https://api.github.com/` |
+
+NOTE: The trailing slash is significant. So `https://some.url.blah` does not work. It should be `https://some.url.blah/`.
+
+e.g.)
+```shell
+export GITHUB_ENT_BASE_URL="https://github.my-company.internal/api/v3/"
+```
+```scala
+gitHubPagesGitHubBaseUrl := "https://github.my-company.internal/api/v3/"
+```
+
+
+### GitHub Enterprise - Authorize URL
+| Name                            | Value Type | Default                                                                                                                         |
+| ------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `gitHubPagesGitHubAuthorizeUrl` | `String`   | ENV VAR `GITHUB_ENT_AUTHORIZE_URL` or `https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s&scope=%s&state=%s` |
+
+e.g.)
+```shell
+export GITHUB_ENT_AUTHORIZE_URL="https://github.my-company.internal/login/oauth/authorize?client_id=%s&redirect_uri=%s&scope=%s&state=%s"
+```
+
+```scala
+gitHubPagesGitHubAuthorizeUrl :=
+  "https://github.my-company.internal/login/oauth/authorize?client_id=%s&redirect_uri=%s&scope=%s&state=%s"
+```
+
+
+### GitHub Enterprise - Access Token URL
+| Name                              | Value Type | Default                                                                                |
+| --------------------------------- | ---------- | -------------------------------------------------------------------------------------- |
+| `gitHubPagesGitHubAccessTokenUrl` | `String`   | ENV VAR `GITHUB_ENT_ACCESS_TOKEN_URL` or `https://github.com/login/oauth/access_token` |
+
+e.g.)
+```shell
+export GITHUB_ENT_ACCESS_TOKEN_URL="https://github.my-company.internal/login/oauth/access_token"
+```
+
+```scala
+gitHubPagesGitHubAccessTokenUrl :=
+  "https://github.my-company.internal/login/oauth/access_token"
+```
+
+
+### GitHub Enterprise - Headers
+| Name                       | Value Type            | Default                                                           |
+| -------------------------- | --------------------- | ----------------------------------------------------------------- |
+| `gitHubPagesGitHubHeaders` | `Map[String, String]` | ENV VAR `GITHUB_ENT_HEADERS` or `Map("User-Agent" -> "github4s")` |
+
+e.g.)
+When using the environment variable, the value should be JSON containing String key to String value pairs.
+e.g.)
+```shell
+export GITHUB_ENT_HEADERS='{"User-Agent":"app-doc-publisher", "something-else":"blah"}'
+```
+
+```scala
+gitHubPagesGitHubHeaders := Map("User-Agent" -> "app-doc-publisher")
+```

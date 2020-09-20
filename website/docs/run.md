@@ -46,7 +46,15 @@ run `npm run build` at `docusaurDir.value`
 ```
 docusaurGenerateAlgoliaConfigFile
 ```
-Generate the Algolia config file at `docusaurDir.value`
+Generate the Algolia config file at `docusaurDir.value`.
+
+## Google Analytics  (Optional)
+
+### Generate Google Analytics Config File
+```
+docusaurGenerateGoogleAnalyticsConfigFile
+```
+Generate the Google Analytics config file at `docusaurDir.value`.
 
 ## Publish
 
