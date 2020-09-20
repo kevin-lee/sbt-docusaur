@@ -159,20 +159,51 @@ Algolia index name. If missing, Algolia config with an empty object (`{}`) is cr
 | --------------------------------------- | ---------- | ------------------------------------------------------------------------- |
 | `docusaurGoogleAnalyticsConfigFilename` | `String`   | `sys.env.getOrElse("GA_CONFIG_FILENAME", "google-analytics.config.json")` |
 
-### Google Analytics  (Optional)
+e.g.)
+
+```shell
+export GA_CONFIG_FILENAME=ga-conf.json
+```
+Or
+```scala
+docusaurGoogleAnalyticsConfigFilename := "ga-conf.json"
+```
+
+
+### Google Analytics Tracking ID (Optional)
 | Name                                | Value Type       | Default                               |
 | ----------------------------------- | ---------------- | ------------------------------------- |
 | `docusaurGoogleAnalyticsTrackingId` | `Option[String]` | `sys.env.getOrElse("GA_TRACKING_ID")` |
 
 Google Analytics Tracking ID. If missing, Google Analytics config with an empty object (`{}`) is created.
 
+e.g.)
 
-### Google Analytics  (Optional)
+```shell
+export GA_TRACKING_ID=UA-000000-1
+```
+Or
+```scala
+docusaurGoogleAnalyticsTrackingId := Some("UA-000000-1")
+```
+
+
+### Google Analytics Anonymize IP (Optional)
 | Name                                 | Value Type        | Default                                |
 | ------------------------------------ | ----------------- | -------------------------------------- |
 | `docusaurGoogleAnalyticsAnonymizeIp` | `Option[Boolean]` | `sys.env.getOrElse("GA_ANONYMIZE_IP")` |
 
 If missing, no `anonymizeIP` is written in the config file.
+
+e.g.)
+
+```shell
+export GA_ANONYMIZE_IP=true
+```
+Or
+```scala
+docusaurGoogleAnalyticsAnonymizeIp := Some(true)
+```
 
 
 ## Use GitHub Enterprise
@@ -196,6 +227,7 @@ e.g.)
 ```shell
 export GITHUB_ENT_BASE_URL="https://github.my-company.internal/api/v3/"
 ```
+Or
 ```scala
 gitHubPagesGitHubBaseUrl := "https://github.my-company.internal/api/v3/"
 ```
@@ -210,7 +242,7 @@ e.g.)
 ```shell
 export GITHUB_ENT_AUTHORIZE_URL="https://github.my-company.internal/login/oauth/authorize?client_id=%s&redirect_uri=%s&scope=%s&state=%s"
 ```
-
+Or
 ```scala
 gitHubPagesGitHubAuthorizeUrl :=
   "https://github.my-company.internal/login/oauth/authorize?client_id=%s&redirect_uri=%s&scope=%s&state=%s"
@@ -226,7 +258,7 @@ e.g.)
 ```shell
 export GITHUB_ENT_ACCESS_TOKEN_URL="https://github.my-company.internal/login/oauth/access_token"
 ```
-
+Or
 ```scala
 gitHubPagesGitHubAccessTokenUrl :=
   "https://github.my-company.internal/login/oauth/access_token"
@@ -244,7 +276,7 @@ e.g.)
 ```shell
 export GITHUB_ENT_HEADERS='{"User-Agent":"app-doc-publisher", "something-else":"blah"}'
 ```
-
+Or
 ```scala
 gitHubPagesGitHubHeaders := Map("User-Agent" -> "app-doc-publisher")
 ```
