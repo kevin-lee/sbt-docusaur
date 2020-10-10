@@ -29,7 +29,7 @@ const websiteConfig = {
         alt: 'sbt-docusaur Logo',
         src: 'img/sbt-docusaur-logo-32x32.png',
       },
-      links: [
+      items: [
         {
           to: 'docs/',
           activeBasePath: 'docs',
@@ -78,7 +78,6 @@ const websiteConfig = {
       {
         docs: {
           // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: 'getting-started',
           sidebarPath: require.resolve('./sidebars.js'),
         },
         theme: {
