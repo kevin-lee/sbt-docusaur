@@ -2,8 +2,9 @@
 id: getting-started
 title: Getting Started
 sidebar_label: Getting Started
+slug: "/"
 ---
-# ![](../img/sbt-docusaur-logo-64x64.png) sbt-docusaur
+# ![](/img/sbt-docusaur-logo-64x64.png) sbt-docusaur
 sbt plugin for Docusaurus
 
 
