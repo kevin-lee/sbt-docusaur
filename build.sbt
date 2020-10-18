@@ -88,7 +88,7 @@ lazy val root = (project in file("."))
       ) ++ hedgehogLibs
   , testFrameworks ++= Seq(TestFramework("hedgehog.sbt.Framework"))
 
-  , addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.2.0")
+  , addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.3.0")
 
   /* GitHub Release { */
   , artifactsRequiredForGitHubRelease := false
