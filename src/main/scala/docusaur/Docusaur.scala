@@ -8,7 +8,7 @@ import cats.data.EitherT
 import cats.implicits._
 import docusaur.npm.Npm.NpmPath
 import docusaur.npm.{Npm, NpmCmd, NpmError}
-import effectie.Effectful._
+import effectie.cats.Effectful._
 import effectie.cats.EitherTSupport._
 import effectie.cats.{CanCatch, EffectConstructor}
 import filef.{FileError2, FileF2}
@@ -58,7 +58,7 @@ object Docusaur {
         Npm.run[F](npmPath, path.some, npmCmd)
       )
     _ <- eitherTRightF[NpmError](
-        log(effectOfPure(
+        log(pureOf(
           s"""Successfully run npm for $what
              |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
              |${result.mkString("  ", "\n  ", "\n")}
@@ -74,7 +74,7 @@ object Docusaur {
   )(
     logMessage: String
   ): F[Unit] =
-    log(effectOfPure(logMessage))(info) *>
+    log(pureOf(logMessage))(info) *>
       effectOf(
         SbtIo.write(
           theFile,

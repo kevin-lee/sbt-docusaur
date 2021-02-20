@@ -5,7 +5,7 @@ import java.io.File
 import cats._
 import cats.data.EitherT
 import cats.implicits._
-import effectie.Effectful._
+import effectie.cats.Effectful._
 import effectie.cats.Catching._
 import effectie.cats.EitherTSupport._
 import effectie.cats.{CanCatch, EffectConstructor}
