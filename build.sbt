@@ -1,7 +1,7 @@
 import ProjectInfo._
 
 lazy val root = (project in file("."))
-  .enablePlugins(DevOopsGitHubReleasePlugin, DocusaurPlugin)
+  .enablePlugins(SbtPlugin, DevOopsGitHubReleasePlugin, DocusaurPlugin)
   .settings(
     organization := props.Org,
     name := props.ProjectName,
@@ -23,11 +23,10 @@ lazy val root = (project in file("."))
         s"git@github.com:${props.GitHubUsername}/${props.ProjectName}.git",
       ).some,
     startYear := 2020.some,
-    sbtPlugin := true,
     sbtVersion in Global := props.GlobalSbtVersion,
     crossSbtVersions := props.CrossSbtVersions,
     pluginCrossBuild / sbtVersion := "1.2.8",
-    addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.0" cross CrossVersion.full),
+    addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.3" cross CrossVersion.full),
     addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
     libraryDependencies ++= libs.all,
     testFrameworks ~= (fws => (TestFramework("hedgehog.sbt.Framework") +: fws).distinct),
