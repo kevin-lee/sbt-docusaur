@@ -23,17 +23,15 @@ lazy val root = (project in file("."))
         s"git@github.com:${props.GitHubUsername}/${props.ProjectName}.git",
       ).some,
     startYear := 2020.some,
-    sbtVersion in Global := props.GlobalSbtVersion,
+    Global / sbtVersion := props.GlobalSbtVersion,
     crossSbtVersions := props.CrossSbtVersions,
     pluginCrossBuild / sbtVersion := "1.2.8",
-    addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.11.3" cross CrossVersion.full),
-    addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
     libraryDependencies ++= libs.all,
     testFrameworks ~= (fws => (TestFramework("hedgehog.sbt.Framework") +: fws).distinct),
-    addSbtPlugin("io.kevinlee"         % "sbt-github-pages"   % "0.4.0"),
+    addSbtPlugin("io.kevinlee"         % "sbt-github-pages"   % "0.5.0"),
     Compile / console / scalacOptions := scalacOptions.value diff List("-Ywarn-unused-import", "-Xfatal-warnings"),
-    wartremoverErrors in (Compile, compile) ++= commonWarts,
-    wartremoverErrors in (Test, compile) ++= commonWarts,
+    Compile / compile / wartremoverErrors ++= commonWarts,
+    Test / compile / wartremoverErrors ++= commonWarts,
     /* GitHub Release { */
     devOopsPackagedArtifacts := List.empty[String],
     /* } GitHub Release */
@@ -70,8 +68,16 @@ lazy val props =
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
-    val hedgehogVersion: String = "0.6.5"
-    val http4sVersion: String   = "0.21.20"
+    val hedgehogVersion: String = "0.6.7"
+
+    val catsVersion = "2.6.0"
+    val catsEffectVersion = "2.5.0"
+    val http4sVersion   = "0.21.22"
+    val github4sVersion = "0.28.4"
+
+    val effectieVersion = "1.10.0"
+    val loggerFVersion = "1.10.0"
+    val justSysprocessVersion = "0.6.0"
   }
 
 lazy val libs =
@@ -82,18 +88,18 @@ lazy val libs =
       "qa.hedgehog" %% "hedgehog-sbt"    % props.hedgehogVersion % Test,
     )
 
-    lazy val cats: ModuleID       = "org.typelevel" %% "cats-core"   % "2.4.2"
-    lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % "2.3.3"
-    lazy val github4s: ModuleID   = "com.47deg"     %% "github4s"    % "0.28.2"
+    lazy val cats: ModuleID       = "org.typelevel" %% "cats-core"   % props.catsVersion
+    lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % props.catsEffectVersion
+    lazy val github4s: ModuleID   = "com.47deg"     %% "github4s"    % props.github4sVersion
 
     lazy val http4sDsl: ModuleID    = "org.http4s" %% "http4s-dsl"          % props.http4sVersion
     lazy val http4sClient: ModuleID = "org.http4s" %% "http4s-blaze-client" % props.http4sVersion
 
-    lazy val effectie: ModuleID          = "io.kevinlee" %% "effectie-cats-effect" % "1.9.0"
-    lazy val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % "1.9.0"
-    lazy val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging" % "1.9.0"
+    lazy val effectie: ModuleID          = "io.kevinlee" %% "effectie-cats-effect" % props.effectieVersion
+    lazy val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % props.loggerFVersion
+    lazy val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging" % props.loggerFVersion
 
-    lazy val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % "0.5.0"
+    lazy val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % props.justSysprocessVersion
 
     lazy val all: Seq[ModuleID] =
       List(
