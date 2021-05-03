@@ -6,7 +6,6 @@ lazy val root = (project in file("."))
     organization := props.Org,
     name := props.ProjectName,
     scalaVersion := props.ProjectScalaVersion,
-    version := ProjectVersion,
     description := "sbt plugin to publish GitHub Pages",
     developers := List(
       Developer(
@@ -36,15 +35,9 @@ lazy val root = (project in file("."))
     devOopsPackagedArtifacts := List.empty[String],
     /* } GitHub Release */
     /* Publish { */
-    publishMavenStyle := false,
-    licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
+    publishMavenStyle := true,
+    licenses := List("MIT" -> url("http://opensource.org/licenses/MIT")),
     /* } Publish */
-    /* Bintray { */
-    bintrayPackageLabels := Seq("sbt", "plugin"),
-    bintrayVcsUrl := s"""https://github.com/${props.GitHubUsername}/${props.ProjectName}""".some,
-    bintrayRepository := "sbt-plugins",
-    /* } Bintray */
-
     /* Docs { */
     docusaurDir := (ThisBuild / baseDirectory).value / "website",
     docusaurBuildDir := docusaurDir.value / "build",
