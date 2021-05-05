@@ -59,7 +59,8 @@ Generate the Google Analytics config file at `docusaurDir.value`.
 ## Publish
 
 ### Publish to GitHub Pages
-`sbt-docusaur` uses <a href="https://sbt-github-pages.kevinly.dev" target="_blank"><code>sbt-github-pages</code></a> to publish the website to GitHub Pages.
+`sbt-docusaur` uses <a href="https://sbt-github-pages.kevinly.dev" target="_blank"><code>sbt-github-pages</code></a> 
+to publish the website to GitHub Pages.
 ```
 publishToGitHubPages
 ```

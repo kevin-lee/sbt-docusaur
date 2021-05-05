@@ -42,9 +42,9 @@ Check out the [Docusuarus docs](https://v2.docusaurus.io/docs/) and finish confi
 Add `sbt-mdoc` plugin and `sbt-docusaur` to `project/plugins.sbt`. 
 
 ```scala title="project/plugins.sbt"
-addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.2.9" )
+addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.2.20" )
 
-addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.4.0")
+addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.5.0")
 ```
 
 In your `build.sbt`, add a sub-project for the doc site with `sbt-mdoc` and `sbt-docusaur`, and set up the Docusarus.
@@ -108,58 +108,54 @@ module.exports = {
 ### GitHub Actions
 Just place the following yaml file in `YOUR_PROJECT/.github/workflows/`
 
-Whenever push happens on the `master` branch, it publishes the website. <br />
+Whenever push happens on the `main` branch, it publishes the website. <br />
 It uses Mdoc to generate the Markdown files with the Scala code compiled and run.<br />
 After that it builds Docusarus website then publish to `gh-pages`.
 
 e.g.)
 
 ```yaml title=".github/workflows/publish-github-pages.yml"
-name: Publish GitHub Pages
+name: "Publish GitHub Pages"
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  build:
+  build_and_publish_doc_site:
+    if: github.ref != 'refs/heads/gh-pages' && github.ref != 'gh-pages'
 
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         scala:
-          - { version: "2.13.3", binary-version: "2.13", java-version: "11" }
+          - { binary-version: "2.12", java-version: "adopt@1.8" }
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/checkout@v2.3.4
+      - uses: olafurpg/setup-scala@v10
         with:
           java-version: ${{ matrix.scala.java-version }}
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2.1.5
         with:
           node-version: '14.4.0'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Cache Coursier
-        uses: actions/cache@v1
+      - name: Cache SBT
+        uses: actions/cache@v2
         with:
-          path: ~/.cache/coursier
-          key: ${{ runner.os }}-coursier-scala-${{ matrix.scala.binary-version }}-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/build.properties') }}
+          path: |
+            ~/.ivy2/cache
+            ~/.cache/coursier
+            ~/.sbt
+          key: ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-${{ hashFiles('**/*.sbt') }}
           restore-keys: |
-            ${{ runner.os }}-coursier-scala-${{ matrix.scala.binary-version }}-
-
-      - name: Cache Ivy
-        uses: actions/cache@v1
-        with:
-          path: ~/.ivy2/cache
-          key: ${{ runner.os }}-ivy-scala-${{ matrix.scala.binary-version }}-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/build.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-ivy-scala-${{ matrix.scala.binary-version }}-
+            ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-
 
       - name: Cache npm
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
