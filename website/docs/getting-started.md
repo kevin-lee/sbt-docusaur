@@ -32,8 +32,11 @@ lazy val root = (project in file("."))
     docusaurDir := (ThisBuild / baseDirectory).value / "website",
     docusaurBuildDir := docusaurDir.value / "build",
 
-    gitHubPagesOrgName := "github-username",
-    gitHubPagesRepoName := "project-name"
+    // Optional. It's automatically done by sbt-github-pages
+    // gitHubPagesOrgName := "github-username",
+    
+    // Optional. It's automatically done by sbt-github-pages
+    // gitHubPagesRepoName := "project-name"
   )
 ```
 

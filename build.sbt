@@ -13,7 +13,7 @@ lazy val root = (project in file("."))
         "Kevin Lee",
         "kevin.code@kevinlee.io",
         url(s"https://github.com/${props.GitHubUsername}"),
-      ),
+      )
     ),
     homepage := url(s"https://github.com/${props.GitHubUsername}/${props.ProjectName}").some,
     scmInfo :=
@@ -27,7 +27,7 @@ lazy val root = (project in file("."))
     pluginCrossBuild / sbtVersion := "1.2.8",
     libraryDependencies ++= libs.all,
     testFrameworks ~= (fws => (TestFramework("hedgehog.sbt.Framework") +: fws).distinct),
-    addSbtPlugin("io.kevinlee"         % "sbt-github-pages"   % "0.5.0"),
+    addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.6.0"),
     Compile / console / scalacOptions := scalacOptions.value diff List("-Ywarn-unused-import", "-Xfatal-warnings"),
     Compile / compile / wartremoverErrors ++= commonWarts,
     Test / compile / wartremoverErrors ++= commonWarts,
@@ -41,8 +41,6 @@ lazy val root = (project in file("."))
     /* Docs { */
     docusaurDir := (ThisBuild / baseDirectory).value / "website",
     docusaurBuildDir := docusaurDir.value / "build",
-    gitHubPagesOrgName := props.GitHubUsername,
-    gitHubPagesRepoName := props.ProjectName,
     /* } Docs */
 
   )
@@ -63,13 +61,13 @@ lazy val props =
 
     val hedgehogVersion: String = "0.6.7"
 
-    val catsVersion = "2.6.0"
+    val catsVersion       = "2.6.0"
     val catsEffectVersion = "2.5.0"
-    val http4sVersion   = "0.21.22"
-    val github4sVersion = "0.28.4"
+    val http4sVersion     = "0.21.22"
+    val github4sVersion   = "0.28.4"
 
-    val effectieVersion = "1.10.0"
-    val loggerFVersion = "1.10.0"
+    val effectieVersion       = "1.10.0"
+    val loggerFVersion        = "1.10.0"
     val justSysprocessVersion = "0.6.0"
   }
 
