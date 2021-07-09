@@ -84,15 +84,17 @@ docusaurBuildDir := docusaurDir.value / "build" / "some-project"
 ```
 
 
-### GitHub Org Name / Username *
+### GitHub Org Name / Username
 
 :::important
 This key must be set by the user of this plugin to publish the website to GitHub Pages.
+
+However, it is automatically done by `sbt-github-pages` so you don't need to set it up unless you want to set it otherwise.
 :::
 
-| Name                 | Value Type | Default    |
-| -------------------- | ---------- | ---------- |
-| `gitHubPagesOrgName` | `String`   |            |
+| Name                 | Value Type | Default                                  |
+| -------------------- | ---------- | ---------------------------------------- |
+| `gitHubPagesOrgName` | `String`   | Value obtained from calling `git remote` |
 
 The GitHub organization name (or username) (i.e.`OrgName` from `https://github.com/OrgName/RepoName`)
 
@@ -101,16 +103,22 @@ e.g.) If the repo is https://github.com/Kevin-Lee/sbt-docusaur
 gitHubPagesOrgName := "Kevin-Lee"
 ```
 
+:::note
+You don't need to set it up as `sbt-github-pages` does it automatically with the value from `git remote`.
+:::
 
-### GitHub Repo Name *
+
+### GitHub Repo Name
 
 :::important
 This key must be set by the user of this plugin to publish the website to GitHub Pages.
+
+However, it is automatically done by `sbt-github-pages` so you don't need to set it up unless you want to set it otherwise.
 :::
 
-| Name                  | Value Type | Default    |
-| --------------------- | ---------- | ---------- |
-| `gitHubPagesRepoName` | `String`  |            |
+| Name                  | Value Type | Default                                  |
+| --------------------- | ---------- | ---------------------------------------- |
+| `gitHubPagesRepoName` | `String`   | Value obtained from calling `git remote` |
 
 The GitHub project repository name (i.e. `RepoName` from `https://github.com/OrgName/RepoName`)
 
@@ -118,6 +126,11 @@ e.g.) If the repo is https://github.com/Kevin-Lee/sbt-docusaur
 ```scala
 gitHubPagesRepoName := "sbt-docusaur"
 ```
+
+:::note
+You don't need to set it up as `sbt-github-pages` does it automatically with the value from `git remote`.
+:::
+
 
 ## More Settings
 

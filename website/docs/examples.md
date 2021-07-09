@@ -55,19 +55,16 @@ lazy val noPublish = Seq(
   publish := {},
   publishLocal := {},
   publishArtifact := false,
-  skip in publish := true
+  skip in publish := true,
 )
 
 lazy val docs = (project in file("generated-docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
   .settings(
-    name := "docs"
+    name := "docs",
 
-  , docusaurDir := (ThisBuild / baseDirectory).value / "website"
-  , docusaurBuildDir := docusaurDir.value / "build"
-
-  , gitHubPagesOrgName := "YOUR_USERNAME_OR_ORG_NAME"
-  , gitHubPagesRepoName := "REPO_NAME"
+    docusaurDir := (ThisBuild / baseDirectory).value / "website",
+    docusaurBuildDir := docusaurDir.value / "build",
   )
   .settings(noPublish) // This is optional to exclude this sub-project
                        // when sbt publish to upload the artifacts.
