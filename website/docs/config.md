@@ -18,10 +18,12 @@ docusaurDir := file("path" / "to" / "docusaurus-website"),
 docusaurBuildDir := docusaurDir.value / "build" / "path",
 ```
 
-To publish the website to GitHub Page, add the following keys as well.
+To publish the website to GitHub Page, add the following keys as well. However, these can be automatically set by `sbt-github-pages` if missing.
 
 ```scala
+// Optional. It's automatically done by sbt-github-pages
 gitHubPagesOrgName := "USERNAME_OR_ORG",
+// Optional. It's automatically done by sbt-github-pages
 gitHubPagesRepoName := "YOUR_PROJECT",
 ```
 :::note
