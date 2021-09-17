@@ -4,11 +4,11 @@ import java.io.File
 
 import cats._
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import effectie.cats.Effectful._
 import effectie.cats.Catching._
 import effectie.cats.EitherTSupport._
-import effectie.cats.{CanCatch, EffectConstructor}
+import effectie.cats.{CanCatch, Fx}
 
 import scala.annotation.tailrec
 
@@ -17,7 +17,7 @@ import scala.annotation.tailrec
  * @since 2020-06-26
  */
 object FileF2 {
-  def deleteAllIn[F[_]: EffectConstructor: CanCatch: Monad](file: File): F[Either[FileError2, List[String]]] = {
+  def deleteAllIn[F[_]: Fx: CanCatch: Monad](file: File): F[Either[FileError2, List[String]]] = {
     @tailrec
     def listAllIn(files: List[File], acc: List[File]): List[File] =
       files match {

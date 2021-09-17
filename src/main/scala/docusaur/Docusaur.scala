@@ -5,12 +5,12 @@ import java.nio.charset.Charset
 
 import cats._
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import docusaur.npm.Npm.NpmPath
 import docusaur.npm.{Npm, NpmCmd, NpmError}
 import effectie.cats.Effectful._
 import effectie.cats.EitherTSupport._
-import effectie.cats.{CanCatch, EffectConstructor}
+import effectie.cats.{CanCatch, Fx}
 import filef.{FileError2, FileF2}
 import loggerf.cats._
 import loggerf.syntax._
@@ -23,19 +23,19 @@ import sbt.{IO => SbtIo}
  */
 object Docusaur {
 
-  def deleteFilesIn[F[_]: EffectConstructor: CanCatch: Monad](
+  def deleteFilesIn[F[_]: Fx: CanCatch: Monad](
     what: String,
     file: File
   ): F[Either[FileError2, List[String]]] =
     FileF2.deleteAllIn[F](file)
 
-  def install[F[_]: EffectConstructor: CanCatch: LogF: Monad](
+  def install[F[_]: Fx: CanCatch: LogF: Monad](
     npmPath: Option[NpmPath],
     docusaurusDir: File
   ): F[Either[NpmError, Unit]] =
     runAndLogNpm("Docusaurus install", npmPath, docusaurusDir, NpmCmd.install)
 
-  def runBuild[F[_]: EffectConstructor: CanCatch: LogF: Monad](
+  def runBuild[F[_]: Fx: CanCatch: LogF: Monad](
     what: String,
     npmPath: Option[NpmPath],
     docusaurusDir: File
@@ -48,7 +48,7 @@ object Docusaur {
     )
 
 
-  def runAndLogNpm[F[_]: EffectConstructor: CanCatch: LogF: Monad](
+  def runAndLogNpm[F[_]: Fx: CanCatch: LogF: Monad](
     what: String,
     npmPath: Option[NpmPath],
     path: File,
@@ -68,13 +68,13 @@ object Docusaur {
   } yield ()).value
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
-  def logAndWriteFile[F[_]: EffectConstructor: LogF: Monad](
+  def logAndWriteFile[F[_]: Fx: LogF: Monad](
     theFile: File,
     content: String
   )(
     logMessage: String
   ): F[Unit] =
-    log(pureOf(logMessage))(info) *>
+    log(pureOf(logMessage))(info) >>
       effectOf(
         SbtIo.write(
           theFile,
@@ -84,7 +84,7 @@ object Docusaur {
         )
       )
 
-  def createAlgoliaConfig[F[_]: EffectConstructor: LogF: Monad](
+  def createAlgoliaConfig[F[_]: Fx: LogF: Monad](
     algoliaConfigPath: File,
     algoliaApiKey: Option[String],
     algoliaIndexName: Option[String]
@@ -150,7 +150,7 @@ object Docusaur {
         )
     }
 
-  def createGoogleAnalyticsConfig[F[_]: EffectConstructor: LogF: Monad](
+  def createGoogleAnalyticsConfig[F[_]: Fx: LogF: Monad](
     googleAnalyticsConfigPath: File,
     googleAnalyticsTrackingId: Option[String],
     googleAnalyticsAnonymizeIp: Option[Boolean]
