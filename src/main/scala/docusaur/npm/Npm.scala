@@ -3,8 +3,8 @@ package docusaur.npm
 import java.io.File
 
 import cats._
-import cats.implicits._
-import effectie.cats.EffectConstructor
+import cats.syntax.all._
+import effectie.cats.Fx
 import effectie.cats.EitherTSupport._
 import just.sysprocess.{ProcessResult, SysProcess}
 
@@ -16,7 +16,7 @@ object Npm {
 
   final case class NpmPath(npmPath: File) extends AnyVal
 
-  def execute[F[_]: EffectConstructor: Monad, A](
+  def execute[F[_]: Fx: Monad, A](
     baseDir: Option[File],
     command: String,
     commands: String*
@@ -52,12 +52,12 @@ object Npm {
   private def npm(npmPath: Option[NpmPath]): String =
     npmPath.fold("npm")(_.npmPath.getCanonicalPath)
 
-  def version[F[_]: EffectConstructor: Monad](
+  def version[F[_]: Fx: Monad](
     npmPath: Option[NpmPath]
   ): F[Either[NpmError, String]] =
     execute(none, npm(npmPath), "--version")(_.mkString)
 
-  def run[F[_]: EffectConstructor: Monad](
+  def run[F[_]: Fx: Monad](
     npmPath: Option[NpmPath],
     baseDir: Option[File],
     npmCmd: NpmCmd

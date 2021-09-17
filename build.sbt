@@ -59,16 +59,16 @@ lazy val props =
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
-    val hedgehogVersion: String = "0.6.7"
+    val hedgehogVersion: String = "0.7.0"
 
-    val catsVersion       = "2.6.0"
-    val catsEffectVersion = "2.5.0"
-    val http4sVersion     = "0.21.22"
-    val github4sVersion   = "0.28.4"
+    val catsVersion       = "2.6.1"
+    val catsEffectVersion = "2.5.3"
+    val http4sVersion     = "0.21.27"
+    val github4sVersion   = "0.28.5"
 
-    val effectieVersion       = "1.10.0"
-    val loggerFVersion        = "1.10.0"
-    val justSysprocessVersion = "0.6.0"
+    val effectieVersion       = "1.15.0"
+    val loggerFVersion        = "1.15.0"
+    val justSysprocessVersion = "0.8.0"
   }
 
 lazy val libs =
