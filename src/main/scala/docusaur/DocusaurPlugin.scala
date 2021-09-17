@@ -134,6 +134,24 @@ object DocusaurPlugin extends AutoPlugin {
       )
     }.value,
 
+    docusaurAuditFix := Def.taskDyn {
+      @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
+      implicit val logF = loggerFLogger(streams.value.log)
+      val docusaurusDir = docusaurDir.value
+      val npmPath = docusaurNpmPath.value.map(Npm.NpmPath)
+      Def.task(
+        returnOrThrowMessageOnlyException(
+          Docusaur.runAndLogNpm[IO](
+            "Docusaurus npm audit fix",
+            npmPath,
+            docusaurusDir,
+            NpmCmd.auditFix
+          )
+          .unsafeRunSync()
+        )(NpmError.render)
+      )
+    }.value,
+
     docusaurAlgoliaConfigFilename := sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json"),
     docusaurAlgoliaApiKey := sys.env.get("ALGOLIA_API_KEY"),
     docusaurAlgoliaIndexName := sys.env.get("ALGOLIA_INDEX_NAME"),

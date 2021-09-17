@@ -47,6 +47,11 @@ trait DocusaurKeys {
       "run npm run build at docusaurDir.value"
     )
 
+  lazy val docusaurAuditFix: TaskKey[Unit] =
+    taskKey[Unit](
+      "run npm audit fix at docusaurDir.value"
+    )
+
   lazy val docusaurAlgoliaConfigFilename: SettingKey[String] =
     settingKey[String]("""The name of Algolia config file (default: sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json"))""")
 
