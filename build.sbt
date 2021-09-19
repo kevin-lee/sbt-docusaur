@@ -47,28 +47,31 @@ lazy val root = (project in file("."))
 
 lazy val props =
   new {
-    val Org: String = "io.kevinlee"
+    final val Org = "io.kevinlee"
 
-    val GitHubUsername: String = "Kevin-Lee"
-    val ProjectName: String    = "sbt-docusaur"
+    private val gitHubRepo = findRepoOrgAndName
 
-    val ProjectScalaVersion: String     = "2.12.12"
+    final val GitHubUsername = gitHubRepo.fold("Kevin-Lee")(_.orgToString)
+    final val ProjectName    = gitHubRepo.fold("sbt-docusaur")(_.nameToString)
+
+    final val ProjectScalaVersion = "2.12.12"
+
     val CrossScalaVersions: Seq[String] = Seq(ProjectScalaVersion)
 
-    val GlobalSbtVersion: String = "1.2.8"
+    final val GlobalSbtVersion = "1.2.8"
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
-    val hedgehogVersion: String = "0.7.0"
+    final val hedgehogVersion = "0.7.0"
 
-    val catsVersion       = "2.6.1"
-    val catsEffectVersion = "2.5.3"
-    val http4sVersion     = "0.21.27"
-    val github4sVersion   = "0.28.5"
+    final val catsVersion       = "2.6.1"
+    final val catsEffectVersion = "2.5.3"
+    final val http4sVersion     = "0.21.27"
+    final val github4sVersion   = "0.28.5"
 
-    val effectieVersion       = "1.15.0"
-    val loggerFVersion        = "1.15.0"
-    val justSysprocessVersion = "0.8.0"
+    final val effectieVersion       = "1.15.0"
+    final val loggerFVersion        = "1.15.0"
+    final val justSysprocessVersion = "0.8.0"
   }
 
 lazy val libs =
