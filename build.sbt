@@ -27,7 +27,7 @@ lazy val root = (project in file("."))
     pluginCrossBuild / sbtVersion := "1.2.8",
     libraryDependencies ++= libs.all,
     testFrameworks ~= (fws => (TestFramework("hedgehog.sbt.Framework") +: fws).distinct),
-    addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.6.0"),
+    addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.7.0"),
     Compile / console / scalacOptions := scalacOptions.value diff List("-Ywarn-unused-import", "-Xfatal-warnings"),
     Compile / compile / wartremoverErrors ++= commonWarts,
     Test / compile / wartremoverErrors ++= commonWarts,
