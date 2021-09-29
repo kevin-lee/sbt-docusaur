@@ -71,7 +71,7 @@ lazy val props =
 
     final val effectieVersion       = "1.15.0"
     final val loggerFVersion        = "1.15.0"
-    final val justSysprocessVersion = "0.8.0"
+    final val justSysprocessVersion = "1.0.0"
   }
 
 lazy val libs =
