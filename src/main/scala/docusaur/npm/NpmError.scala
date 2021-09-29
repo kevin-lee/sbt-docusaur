@@ -2,10 +2,9 @@ package docusaur.npm
 
 import errors.StackTraceToString
 
-/**
- * @author Kevin Lee
- * @since 2020-06-23
- */
+/** @author Kevin Lee
+  * @since 2020-06-23
+  */
 sealed trait NpmError
 
 object NpmError {
@@ -23,7 +22,6 @@ object NpmError {
   def npmCmdNonFatal(commands: List[String], throwable: Throwable): NpmError =
     NpmCmdNonFatal(commands, throwable)
 
-
   final case class ErrorCode(errorCode: Int) extends AnyVal
 
   def npmCmdError(
@@ -32,7 +30,6 @@ object NpmError {
     errors: List[String]
   ): NpmError =
     NpmCmdError(commands, errorCode, errors)
-
 
   def render(npmError: NpmError): String = npmError match {
     case NpmCmdError(commands, errorCode, errors) =>

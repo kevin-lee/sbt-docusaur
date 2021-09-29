@@ -17,10 +17,9 @@ import loggerf.syntax._
 import loggerf.cats.{Log => LogF}
 import sbt.{IO => SbtIo}
 
-/**
- * @author Kevin Lee
- * @since 2020-06-27
- */
+/** @author Kevin Lee
+  * @since 2020-06-27
+  */
 object Docusaur {
 
   def deleteFilesIn[F[_]: Fx: CanCatch: Monad](
@@ -47,24 +46,25 @@ object Docusaur {
       NpmCmd.run(NpmCmd.Run.Param.build)
     )
 
-
   def runAndLogNpm[F[_]: Fx: CanCatch: LogF: Monad](
     what: String,
     npmPath: Option[NpmPath],
     path: File,
     npmCmd: NpmCmd
   ): F[Either[NpmError, Unit]] = (for {
-    result <-  EitherT(
-        Npm.run[F](npmPath, path.some, npmCmd)
-      )
-    _ <- eitherTRightF[NpmError](
-        log(pureOf(
-          s"""Successfully run npm for $what
-             |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
-             |${result.mkString("  ", "\n  ", "\n")}
-             |""".stripMargin
-        ))(info)
-      )
+    result <- EitherT(
+                Npm.run[F](npmPath, path.some, npmCmd)
+              )
+    _      <- eitherTRightF[NpmError](
+                log(
+                  pureOf(
+                    s"""Successfully run npm for $what
+                       |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
+                       |${result.mkString("  ", "\n  ", "\n")}
+                       |""".stripMargin
+                  )
+                )(info)
+              )
   } yield ()).value
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
@@ -112,16 +112,17 @@ object Docusaur {
           )
         else
           logAndWriteFile(
-            algoliaConfigPath
-            , s"""{
-                 |  "apiKey": "$apiKey",
-                 |  "indexName": "$indexName"
-                 |}
-                 |""".stripMargin)(
+            algoliaConfigPath,
+            s"""{
+               |  "apiKey": "$apiKey",
+               |  "indexName": "$indexName"
+               |}
+               |""".stripMargin
+          )(
             s"""The algoliaConfig info is found so the algoliaConfig file will be generated at $algoliaConfigPath
                |""".stripMargin
           )
-      case (Some(_), None) =>
+      case (Some(_), None)                 =>
         logAndWriteFile(algoliaConfigPath, "{}")(
           s"""The algolia apiKey is found but no indexName is in the environment variables.
              |So It will create the algoliaConfig file with an empty algoliaConfig at $algoliaConfigPath
@@ -165,12 +166,13 @@ object Docusaur {
           )
         else
           logAndWriteFile(
-            googleAnalyticsConfigPath
-            , s"""{
-                 |  "trackingID": "$trackingId",
-                 |  "anonymizeIP": false
-                 |}
-                 |""".stripMargin)(
+            googleAnalyticsConfigPath,
+            s"""{
+               |  "trackingID": "$trackingId",
+               |  "anonymizeIP": false
+               |}
+               |""".stripMargin
+          )(
             s"""The Google Analytics config info is found so the Google Analytics config file will be generated at $googleAnalyticsConfigPath
                |""".stripMargin
           )
@@ -184,23 +186,25 @@ object Docusaur {
           )
         else
           logAndWriteFile(
-            googleAnalyticsConfigPath
-            , s"""{
-                 |  "trackingID": "$trackingId",
-                 |  "anonymizeIP": true
-                 |}
-                 |""".stripMargin)(
+            googleAnalyticsConfigPath,
+            s"""{
+               |  "trackingID": "$trackingId",
+               |  "anonymizeIP": true
+               |}
+               |""".stripMargin
+          )(
             s"""The Google Analytics config info is found so the Google Analytics config file will be generated at $googleAnalyticsConfigPath
                |""".stripMargin
           )
 
       case (Some(trackingId), None) =>
         logAndWriteFile(
-          googleAnalyticsConfigPath
-          , s"""{
-               |  "trackingID": "$trackingId"
-               |}
-               |""".stripMargin)(
+          googleAnalyticsConfigPath,
+          s"""{
+             |  "trackingID": "$trackingId"
+             |}
+             |""".stripMargin
+        )(
           s"""The Google Analytics tracking ID is found but no anonymizeIP config value is found in the environment variables.
              |So It will create the Google Analytics config file with 'trackingID' without 'anonymizeIP' at $googleAnalyticsConfigPath
              |If you want to set up anonymizeIP, set the following env var.
