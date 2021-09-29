@@ -4,10 +4,9 @@ import java.io.File
 
 import sbt._
 
-/**
- * @author Kevin Lee
- * @since 2020-06-17
- */
+/** @author Kevin Lee
+  * @since 2020-06-17
+  */
 trait DocusaurKeys {
 
   lazy val docusaurNpmPath: SettingKey[Option[File]] =
@@ -16,7 +15,9 @@ trait DocusaurKeys {
     )
 
   lazy val docusaurDir: SettingKey[File] =
-    settingKey[File]("""The path to the Docusaurus base directory. No default value. e.g.) docusaurDir := (ThisBuild / baseDirectory).value / "website"""")
+    settingKey[File](
+      """The path to the Docusaurus base directory. No default value. e.g.) docusaurDir := (ThisBuild / baseDirectory).value / "website""""
+    )
 
   lazy val docusaurBuildDir: SettingKey[File] =
     settingKey[File](
@@ -25,7 +26,8 @@ trait DocusaurKeys {
         |    docusaurBuildDir := docusaurDir.value / "build"
         |    or
         |    docusaurBuildDir := docusaurDir.value / "build" / "your-project"
-        |""".stripMargin)
+        |""".stripMargin
+    )
 
   lazy val docusaurCleanNodeModules: TaskKey[Unit] =
     taskKey[Unit](
@@ -53,25 +55,37 @@ trait DocusaurKeys {
     )
 
   lazy val docusaurAlgoliaConfigFilename: SettingKey[String] =
-    settingKey[String]("""The name of Algolia config file (default: sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json"))""")
+    settingKey[String](
+      """The name of Algolia config file (default: sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json"))"""
+    )
 
   lazy val docusaurAlgoliaApiKey: SettingKey[Option[String]] =
-    settingKey[Option[String]]("""Algolia API Key. If missing, Algolia config with an empty object ({}) is created. (default: sys.env.get("ALGOLIA_API_KEY") )""")
+    settingKey[Option[String]](
+      """Algolia API Key. If missing, Algolia config with an empty object ({}) is created. (default: sys.env.get("ALGOLIA_API_KEY") )"""
+    )
 
   lazy val docusaurAlgoliaIndexName: SettingKey[Option[String]] =
-    settingKey[Option[String]]("""Algolia index name. If missing, Algolia config with an empty object ({}) is created. (default: sys.env.get("ALGOLIA_INDEX_NAME") )""")
+    settingKey[Option[String]](
+      """Algolia index name. If missing, Algolia config with an empty object ({}) is created. (default: sys.env.get("ALGOLIA_INDEX_NAME") )"""
+    )
 
   lazy val docusaurGenerateAlgoliaConfigFile: TaskKey[Unit] =
     taskKey[Unit]("Generate the Algolia config file at docusaurDir.value")
 
   lazy val docusaurGoogleAnalyticsConfigFilename: SettingKey[String] =
-    settingKey[String]("""The name of Google Analytics config file (default: sys.env.getOrElse("GA_CONFIG_FILENAME", "google-analytics.config.json"))""")
+    settingKey[String](
+      """The name of Google Analytics config file (default: sys.env.getOrElse("GA_CONFIG_FILENAME", "google-analytics.config.json"))"""
+    )
 
   lazy val docusaurGoogleAnalyticsTrackingId: SettingKey[Option[String]] =
-    settingKey[Option[String]]("""Google Analytics Tracking ID. If None, Google Analytics config with an empty object is created. (default: sys.env.get("GA_TRACKING_ID") )""")
+    settingKey[Option[String]](
+      """Google Analytics Tracking ID. If None, Google Analytics config with an empty object is created. (default: sys.env.get("GA_TRACKING_ID") )"""
+    )
 
   lazy val docusaurGoogleAnalyticsAnonymizeIp: SettingKey[Option[Boolean]] =
-    settingKey[Option[Boolean]]("""Google Analytics option to anonymize IP. If None, the Google Analytics config will not have the `anonymizeIP` field. (default: sys.env.get("GA_ANONYMIZE_IP") )""")
+    settingKey[Option[Boolean]](
+      """Google Analytics option to anonymize IP. If None, the Google Analytics config will not have the `anonymizeIP` field. (default: sys.env.get("GA_ANONYMIZE_IP") )"""
+    )
 
   lazy val docusaurGenerateGoogleAnalyticsConfigFile: TaskKey[Unit] =
     taskKey[Unit]("Generate the Google Analytics config file at docusaurDir.value")
