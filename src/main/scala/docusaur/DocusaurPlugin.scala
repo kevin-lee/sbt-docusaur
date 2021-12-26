@@ -32,7 +32,7 @@ object DocusaurPlugin extends AutoPlugin {
     Option(internalLogger.get("Logger")) match {
       case Some(logF) =>
         logF
-      case None       =>
+      case None =>
         val logF = SbtLogger.sbtLoggerCanLog(logger)
         Option(internalLogger.putIfAbsent("Logger", logF)).fold(logF)(identity)
     }

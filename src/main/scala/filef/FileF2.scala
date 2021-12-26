@@ -19,7 +19,7 @@ object FileF2 {
   def deleteAllIn[F[_]: Fx: CanCatch: Monad](file: File): F[Either[FileError2, List[String]]] = {
     @tailrec
     def listAllIn(files: List[File], acc: List[File]): List[File] = files match {
-      case Nil     =>
+      case Nil =>
         acc
       case x :: xs =>
         if (x.isDirectory) {

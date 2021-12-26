@@ -4,10 +4,9 @@ import java.io.File
 
 import errors.StackTraceToString
 
-/**
- * @author Kevin Lee
- * @since 2020-06-06
- */
+/** @author Kevin Lee
+  * @since 2020-06-06
+  */
 sealed trait FileError2
 
 object FileError2 {

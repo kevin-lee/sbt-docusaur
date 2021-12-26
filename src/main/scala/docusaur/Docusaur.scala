@@ -122,7 +122,7 @@ object Docusaur {
             s"""The algoliaConfig info is found so the algoliaConfig file will be generated at $algoliaConfigPath
                |""".stripMargin
           )
-      case (Some(_), None)                 =>
+      case (Some(_), None) =>
         logAndWriteFile(algoliaConfigPath, "{}")(
           s"""The algolia apiKey is found but no indexName is in the environment variables.
              |So It will create the algoliaConfig file with an empty algoliaConfig at $algoliaConfigPath
