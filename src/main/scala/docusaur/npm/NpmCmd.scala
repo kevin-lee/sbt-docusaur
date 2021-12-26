@@ -36,11 +36,11 @@ object NpmCmd {
   def auditFix: NpmCmd              = AuditFix
 
   def values(npmCmd: NpmCmd): List[String] = npmCmd match {
-    case Install    =>
+    case Install =>
       List("install")
     case Run(param) =>
       "run" :: Run.Param.values(param)
-    case AuditFix   =>
+    case AuditFix =>
       List("audit", "fix")
   }
 
