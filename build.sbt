@@ -1,52 +1,65 @@
 import ProjectInfo._
 
+ThisBuild / organization := props.Org
+ThisBuild / scalaVersion := props.ProjectScalaVersion
+ThisBuild / developers   := List(
+  Developer(
+    props.GitHubUsername,
+    "Kevin Lee",
+    "kevin.code@kevinlee.io",
+    url(s"https://github.com/${props.GitHubUsername}"),
+  )
+)
+
+ThisBuild / homepage     := url(s"https://github.com/${props.GitHubUsername}/${props.ProjectName}").some
+ThisBuild / scmInfo      := ScmInfo(
+  url(s"https://github.com/${props.GitHubUsername}/${props.ProjectName}"),
+  s"git@github.com:${props.GitHubUsername}/${props.ProjectName}.git",
+).some
+
+ThisBuild / startYear    := 2020.some
+
+Global / sbtVersion := props.GlobalSbtVersion
+
+ThisBuild / resolvers += "sonatype-snapshots" at s"https://${props.SonatypeCredentialHost}/content/repositories/snapshots"
+
 lazy val root = (project in file("."))
   .enablePlugins(SbtPlugin, DevOopsGitHubReleasePlugin, DocusaurPlugin)
   .settings(
-    organization := props.Org,
-    name := props.ProjectName,
-    scalaVersion := props.ProjectScalaVersion,
-    description := "sbt plugin to publish GitHub Pages",
-    developers := List(
-      Developer(
-        props.GitHubUsername,
-        "Kevin Lee",
-        "kevin.code@kevinlee.io",
-        url(s"https://github.com/${props.GitHubUsername}"),
-      )
-    ),
-    homepage := url(s"https://github.com/${props.GitHubUsername}/${props.ProjectName}").some,
-    scmInfo :=
-      ScmInfo(
-        url(s"https://github.com/${props.GitHubUsername}/${props.ProjectName}"),
-        s"git@github.com:${props.GitHubUsername}/${props.ProjectName}.git",
-      ).some,
-    startYear := 2020.some,
-    Global / sbtVersion := props.GlobalSbtVersion,
-    crossSbtVersions := props.CrossSbtVersions,
-    pluginCrossBuild / sbtVersion := "1.2.8",
+    name                              := props.ProjectName,
+    description                       := "sbt plugin to publish GitHub Pages",
+    crossSbtVersions                  := props.CrossSbtVersions,
+    pluginCrossBuild / sbtVersion     := "1.2.8",
     libraryDependencies ++= libs.all,
     testFrameworks ~= (fws => (TestFramework("hedgehog.sbt.Framework") +: fws).distinct),
     addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.8.1"),
     Compile / console / scalacOptions := scalacOptions.value diff List("-Ywarn-unused-import", "-Xfatal-warnings"),
     Compile / compile / wartremoverErrors ++= commonWarts,
     Test / compile / wartremoverErrors ++= commonWarts,
+
     /* GitHub Release { */
     devOopsPackagedArtifacts := List.empty[String],
     /* } GitHub Release */
+
     /* Publish { */
     publishMavenStyle := true,
-    licenses := List("MIT" -> url("http://opensource.org/licenses/MIT")),
+    licenses          := List("MIT" -> url("http://opensource.org/licenses/MIT")),
     /* } Publish */
+
     /* Docs { */
-    docusaurDir := (ThisBuild / baseDirectory).value / "website",
+    docusaurDir      := (ThisBuild / baseDirectory).value / "website",
     docusaurBuildDir := docusaurDir.value / "build",
     /* } Docs */
 
   )
+  .settings(mavenCentralPublishSettings)
 
 lazy val props =
   new {
+
+    val SonatypeCredentialHost = "s01.oss.sonatype.org"
+    val SonatypeRepository     = s"https://$SonatypeCredentialHost/service/local"
+
     final val Org = "io.kevinlee"
 
     private val gitHubRepo = findRepoOrgAndName
@@ -108,3 +121,10 @@ lazy val libs =
         justSysProcess,
       ) ++ hedgehogLibs
   }
+
+lazy val mavenCentralPublishSettings: SettingsDefinition = List(
+  /* Publish to Maven Central { */
+  sonatypeCredentialHost := props.SonatypeCredentialHost,
+  sonatypeRepository     := props.SonatypeRepository,
+  /* } Publish to Maven Central */
+)
