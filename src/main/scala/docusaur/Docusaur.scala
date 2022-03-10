@@ -86,34 +86,22 @@ object Docusaur {
 
   def createAlgoliaConfig[F[_]: Fx: LogF: Monad](
     algoliaConfigPath: File,
+    algoliaAppId: Option[String],
     algoliaApiKey: Option[String],
     algoliaIndexName: Option[String]
   ): F[Unit] =
-    (algoliaApiKey, algoliaIndexName) match {
-      case (Some(apiKey), Some(indexName)) =>
-        // TODO: replace this logic with Validation
-        if (apiKey.isEmpty && indexName.isEmpty)
-          logAndWriteFile(algoliaConfigPath, "{}")(
-            s"""The algoliaConfig info is found in environment variables but both values are empty.
-               |So It will create the algoliaConfig file with an empty algoliaConfig at $algoliaConfigPath
-               |""".stripMargin
-          )
-        else if (apiKey.isEmpty)
-          logAndWriteFile(algoliaConfigPath, "{}")(
-            s"""The algoliaConfig info is found in environment variables but apiKey value is empty.
-               |So It will create the algoliaConfig file with an empty algoliaConfig at $algoliaConfigPath
-               |""".stripMargin
-          )
-        else if (indexName.isEmpty)
-          logAndWriteFile(algoliaConfigPath, "{}")(
-            s"""The algoliaConfig info is found in environment variables but indexName value is empty.
-               |So It will create the algoliaConfig file with an empty algoliaConfig at $algoliaConfigPath
-               |""".stripMargin
-          )
-        else
+    (algoliaAppId, algoliaApiKey, algoliaIndexName) match {
+      case (Some(appId), Some(apiKey), Some(indexName)) =>
+        val emptyFields =
+          appId.isEmpty.guard[Option].as("'docusaurAlgoliaAppId' for 'appId'").toList ++
+            apiKey.isEmpty.guard[Option].as("'docusaurAlgoliaApiKey' for 'apiKey'").toList ++
+            indexName.isEmpty.guard[Option].as("'docusaurAlgoliaIndexName' for 'indexName'").toList
+
+        if (emptyFields.isEmpty) {
           logAndWriteFile(
             algoliaConfigPath,
             s"""{
+               |  "appId": "$appId",
                |  "apiKey": "$apiKey",
                |  "indexName": "$indexName"
                |}
@@ -122,31 +110,30 @@ object Docusaur {
             s"""The algoliaConfig info is found so the algoliaConfig file will be generated at $algoliaConfigPath
                |""".stripMargin
           )
-      case (Some(_), None) =>
+
+        } else {
+          val singular = emptyFields.length === 1
+          logAndWriteFile(algoliaConfigPath, "{}")(
+            s"""The algoliaConfig info is found in environment variables but ${emptyFields.length} of them ${if (singular) "is" else "are"} empty.
+               |So It will create the algoliaConfig file with an empty algoliaConfig at $algoliaConfigPath
+               |If you want to set up algolia, make sure the following sbt-docusaur config properties have values (Check out the description of each).
+               |${emptyFields.mkString("  - ", "\n  - ", "")}
+               |""".stripMargin
+          )
+        }
+
+      case (_, _, _) =>
+        val missingEnvVars =
+          algoliaAppId.isEmpty.guard[Option].as("ALGOLIA_APP_ID").toList ++
+            algoliaApiKey.isEmpty.guard[Option].as("ALGOLIA_API_KEY").toList ++
+            algoliaIndexName.isEmpty.guard[Option].as("ALGOLIA_INDEX_NAME").toList
+
+        val singular = missingEnvVars.length === 1
         logAndWriteFile(algoliaConfigPath, "{}")(
-          s"""The algolia apiKey is found but no indexName is in the environment variables.
+          s"""There ${if (singular) "is a missing environment variable" else "are missing environment variables"} for algolia.
              |So It will create the algoliaConfig file with an empty algoliaConfig at $algoliaConfigPath
              |If you want to set up algolia, set the following env var.
-             |  - ALGOLIA_INDEX_NAME
-             |""".stripMargin
-        )
-
-      case (None, Some(_)) =>
-        logAndWriteFile(algoliaConfigPath, "{}")(
-          s"""The algolia indexName is found but no apiKey is in the environment variables.
-             |So It will create the algoliaConfig file with an empty algoliaConfig at $algoliaConfigPath
-             |If you want to set up algolia, set the following env var.
-             |  - ALGOLIA_API_KEY
-             |""".stripMargin
-        )
-
-      case (None, None) =>
-        logAndWriteFile(algoliaConfigPath, "{}")(
-          s"""No algoliaConfig (Optional) info found in the environment variables.
-             |So It will create the algoliaConfig file with an empty algoliaConfig at $algoliaConfigPath
-             |If you want to set up algolia, set the following env vars.
-             |  - ALGOLIA_API_KEY
-             |  - ALGOLIA_INDEX_NAME
+             |${missingEnvVars.mkString("  - ", "\n  - ", "")}
              |""".stripMargin
         )
     }

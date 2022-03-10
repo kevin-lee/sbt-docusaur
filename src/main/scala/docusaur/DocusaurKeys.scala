@@ -59,6 +59,11 @@ trait DocusaurKeys {
       """The name of Algolia config file (default: sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json"))"""
     )
 
+  lazy val docusaurAlgoliaAppId: SettingKey[Option[String]] =
+    settingKey[Option[String]](
+      """Algolia Application ID. If missing, Algolia config with an empty object ({}) is created. (default: sys.env.get("ALGOLIA_APP_ID") )"""
+    )
+
   lazy val docusaurAlgoliaApiKey: SettingKey[Option[String]] =
     settingKey[Option[String]](
       """Algolia API Key. If missing, Algolia config with an empty object ({}) is created. (default: sys.env.get("ALGOLIA_API_KEY") )"""
