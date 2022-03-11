@@ -44,7 +44,7 @@ Add `sbt-mdoc` plugin and `sbt-docusaur` to `project/plugins.sbt`.
 ```scala title="project/plugins.sbt"
 addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.2.20" )
 
-addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.8.1")
+addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.9.0")
 ```
 
 In your `build.sbt`, add a sub-project for the doc site with `sbt-mdoc` and `sbt-docusaur`, and set up the Docusarus.
@@ -66,7 +66,7 @@ lazy val docs = (project in file("generated-docs"))
     docusaurDir := (ThisBuild / baseDirectory).value / "website",
     docusaurBuildDir := docusaurDir.value / "build",
   )
-  .settings(noPublish) // This is optional to exclude this sub-project
+  .settings(noPublish) // This is required to exclude this sub-project
                        // when sbt publish to upload the artifacts.
 
 ```
@@ -137,7 +137,7 @@ jobs:
           java-version: ${{ matrix.scala.java-version }}
       - uses: actions/setup-node@v2.1.5
         with:
-          node-version: '14.4.0'
+          node-version: '14.16.0'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Cache SBT
@@ -161,13 +161,15 @@ jobs:
 
       - name: Build and publish website
         env:
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
           ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
           ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
           GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
           GA_ANONYMIZE_IP: ${{ secrets.GA_ANONYMIZE_IP }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          sbt clean \
+          sbt \
+            docs/clean \
             docs/mdoc \
             docs/docusaurGenerateAlgoliaConfigFile \
             docs/docusaurGenerateGoogleAnalyticsConfigFile \

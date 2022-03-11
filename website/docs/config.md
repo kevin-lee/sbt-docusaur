@@ -153,6 +153,14 @@ So you don't need to specify it unless you want to use `npm` from some other pat
 The name of Algolia config file.
 
 
+### Algolia Application ID (Optional)
+| Name                    | Value Type       | Default                          |
+|-------------------------| ---------------- | -------------------------------- |
+| `docusaurAlgoliaAppId`  | `Option[String]` | `sys.env.get("ALGOLIA_APP_ID")` |
+
+Algolia Application ID. If missing, Algolia config with an empty object (`{}`) is created.
+
+
 ### Algolia ApiKey (Optional)
 | Name                    | Value Type       | Default                          |
 | ----------------------- | ---------------- | -------------------------------- |
