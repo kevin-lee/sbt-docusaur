@@ -8,6 +8,7 @@ const isEmptyObject = obj => {
 
 const isSearchable = !isEmptyObject(algoliaConfig);
 const hasGoogleAnalytics = !isEmptyObject(googleAnalyticsConfig);
+const googleAnalytics = hasGoogleAnalytics ? { 'googleAnalytics': googleAnalyticsConfig } : null;
 
 const websiteConfig = {
   title: 'sbt-docusaur',
@@ -83,6 +84,7 @@ const websiteConfig = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        ...googleAnalytics,
       },
     ],
   ],
@@ -90,9 +92,6 @@ const websiteConfig = {
 
 if (isSearchable) {
   websiteConfig['themeConfig']['algolia'] = algoliaConfig;
-}
-if (hasGoogleAnalytics) {
-  websiteConfig['themeConfig']['googleAnalytics'] = googleAnalyticsConfig;
 }
 
 module.exports = websiteConfig;
