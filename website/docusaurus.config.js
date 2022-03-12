@@ -13,7 +13,7 @@ const googleAnalytics = hasGoogleAnalytics ? { 'googleAnalytics': googleAnalytic
 const websiteConfig = {
   title: 'sbt-docusaur',
   tagline: 'sbt plugin for Docusaurus',
-  url: 'http://sbt-docusaur.kevinly.dev',
+  url: 'https://sbt-docusaur.kevinly.dev',
   baseUrl: '/',
   favicon: 'img/favicon.png',
   organizationName: 'Kevin-Lee', // Usually your GitHub org/user name.
