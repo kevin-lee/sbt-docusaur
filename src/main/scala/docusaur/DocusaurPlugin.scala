@@ -1,18 +1,20 @@
 package docusaur
 
-import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
-
-import cats.data.EitherT
 import cats.effect._
+import cats.effect.unsafe.implicits.global
 import docusaur.npm.{Npm, NpmCmd, NpmError}
-import effectie.cats.EitherTSupport._
+import effectie.cats.fx.ioFx
+import extras.cats.syntax.either._
 import filef.FileError2
 import githubpages.GitHubPagesPlugin
 import githubpages.GitHubPagesPlugin.{autoImport => ghpg}
+import loggerf.cats.instances.logF
 import loggerf.logger._
 import sbt.Keys.streams
-import sbt.{IO => _, _}
 import sbt.util.Logger
+import sbt.{IO => _, _}
+
+import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
 
 /** @author Kevin Lee
   * @since 2020-06-17
@@ -30,11 +32,11 @@ object DocusaurPlugin extends AutoPlugin {
 
   def loggerFLogger(logger: Logger): CanLog =
     Option(internalLogger.get("Logger")) match {
-      case Some(logF) =>
-        logF
+      case Some(canLog) =>
+        canLog
       case None =>
-        val logF = SbtLogger.sbtLoggerCanLog(logger)
-        Option(internalLogger.putIfAbsent("Logger", logF)).fold(logF)(identity)
+        val canLog = SbtLogger.sbtLoggerCanLog(logger)
+        Option(internalLogger.putIfAbsent("Logger", canLog)).fold(canLog)(identity)
     }
 
   def toFileRemovalMessage(file: File, files: List[String]): String =
@@ -59,8 +61,8 @@ object DocusaurPlugin extends AutoPlugin {
         Def.task(
           returnOrThrowMessageOnlyException(
             (for {
-              files <- EitherT(Docusaur.deleteFilesIn[IO]("'clean node_modules'", nodeModulesPath))
-              _     <- eitherTRight[FileError2][IO, Unit](log.info(toFileRemovalMessage(nodeModulesPath, files)))
+              files <- Docusaur.deleteFilesIn("'clean node_modules'", nodeModulesPath).eitherT
+              _     <- log.info(toFileRemovalMessage(nodeModulesPath, files)).rightTF[IO, FileError2]
             } yield ())
               .value
               .unsafeRunSync()
@@ -75,9 +77,9 @@ object DocusaurPlugin extends AutoPlugin {
     }.value,
     docusaurInstall                           := Def.taskDyn {
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
-      implicit val logF = loggerFLogger(streams.value.log)
-      val docusaurusDir = docusaurDir.value
-      val npmPath       = docusaurNpmPath.value.map(Npm.NpmPath)
+      implicit val canLog: CanLog = loggerFLogger(streams.value.log)
+      val docusaurusDir           = docusaurDir.value
+      val npmPath                 = docusaurNpmPath.value.map(Npm.NpmPath)
       Def.task(
         returnOrThrowMessageOnlyException(
           Docusaur
@@ -88,16 +90,18 @@ object DocusaurPlugin extends AutoPlugin {
     }.value,
     docusaurCleanBuild                        := Def.taskDyn {
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
-      implicit val logF = loggerFLogger(streams.value.log)
-      val buildPath     = docusaurBuildDir.value
+      implicit val canLog: CanLog = loggerFLogger(streams.value.log)
+      val buildPath               = docusaurBuildDir.value
       if (buildPath.exists()) {
         Def.task(
           returnOrThrowMessageOnlyException(
             (for {
-              files <- EitherT(Docusaur.deleteFilesIn[IO]("'clean the Docusaurus build dir'", buildPath))
-              _     <- eitherTRight[FileError2][IO, Unit](
-                         streams.value.log.info(toFileRemovalMessage(buildPath, files))
-                       )
+              files <- Docusaur.deleteFilesIn[IO]("'clean the Docusaurus build dir'", buildPath).eitherT
+              _     <- streams
+                         .value
+                         .log
+                         .info(toFileRemovalMessage(buildPath, files))
+                         .rightTF[IO, FileError2]
             } yield ())
               .value
               .unsafeRunSync()
@@ -105,16 +109,16 @@ object DocusaurPlugin extends AutoPlugin {
         )
       } else {
         Def.task {
-          logF.info(s"The Docusaurus build dir does not exist at ${buildPath.getCanonicalPath}")
+          canLog.info(s"The Docusaurus build dir does not exist at ${buildPath.getCanonicalPath}")
           ()
         }
       }
     }.value,
     docusaurBuild                             := Def.taskDyn {
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
-      implicit val logF = loggerFLogger(streams.value.log)
-      val docusaurusDir = docusaurDir.value
-      val npmPath       = docusaurNpmPath.value.map(Npm.NpmPath)
+      implicit val canLog: CanLog = loggerFLogger(streams.value.log)
+      val docusaurusDir           = docusaurDir.value
+      val npmPath                 = docusaurNpmPath.value.map(Npm.NpmPath)
       Def.task(
         returnOrThrowMessageOnlyException(
           Docusaur
@@ -130,9 +134,9 @@ object DocusaurPlugin extends AutoPlugin {
     }.value,
     docusaurAuditFix                          := Def.taskDyn {
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
-      implicit val logF = loggerFLogger(streams.value.log)
-      val docusaurusDir = docusaurDir.value
-      val npmPath       = docusaurNpmPath.value.map(Npm.NpmPath)
+      implicit val canLog: CanLog = loggerFLogger(streams.value.log)
+      val docusaurusDir           = docusaurDir.value
+      val npmPath                 = docusaurNpmPath.value.map(Npm.NpmPath)
       Def.task(
         returnOrThrowMessageOnlyException(
           Docusaur
@@ -158,7 +162,7 @@ object DocusaurPlugin extends AutoPlugin {
       val algoliaIndexName      = docusaurAlgoliaIndexName.value
 
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
-      implicit val logF = loggerFLogger(streams.value.log)
+      implicit val canLog: CanLog = loggerFLogger(streams.value.log)
       Def.task(
         Docusaur
           .createAlgoliaConfig[IO](
@@ -197,7 +201,7 @@ object DocusaurPlugin extends AutoPlugin {
       val googleAnalyticsAnonymizeIp    = docusaurGoogleAnalyticsAnonymizeIp.value
 
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
-      implicit val logF = loggerFLogger(streams.value.log)
+      implicit val canLog: CanLog = loggerFLogger(streams.value.log)
       Def.task(
         Docusaur
           .createGoogleAnalyticsConfig[IO](

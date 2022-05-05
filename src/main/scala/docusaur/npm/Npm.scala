@@ -1,12 +1,13 @@
 package docusaur.npm
 
-import java.io.File
 import cats._
 import cats.syntax.all._
-import effectie.cats.Fx
-import effectie.cats.Effectful._
-import effectie.cats.EitherTSupport._
+import effectie.core.Fx
+import effectie.syntax.all._
+import extras.cats.syntax.either._
 import just.sysprocess.{ProcessError, ProcessResult, SysProcess}
+
+import java.io.File
 
 /** @author Kevin Lee
   * @since 2020-06-23
