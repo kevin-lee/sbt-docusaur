@@ -32,7 +32,7 @@ lazy val root = (project in file("."))
     pluginCrossBuild / sbtVersion     := "1.2.8",
     libraryDependencies ++= libs.all,
     testFrameworks ~= (fws => (TestFramework("hedgehog.sbt.Framework") +: fws).distinct),
-    addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.8.1"),
+    addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.9.0"),
     Compile / console / scalacOptions := scalacOptions.value diff List("-Ywarn-unused-import", "-Xfatal-warnings"),
     Compile / compile / wartremoverErrors ++= commonWarts,
     Test / compile / wartremoverErrors ++= commonWarts,
@@ -75,16 +75,18 @@ lazy val props =
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
-    final val hedgehogVersion = "0.7.0"
+    final val hedgehogVersion = "0.8.0"
 
-    final val catsVersion       = "2.6.1"
-    final val catsEffectVersion = "2.5.3"
-    final val http4sVersion     = "0.21.27"
-    final val github4sVersion   = "0.28.5"
+    final val catsVersion       = "2.7.0"
+    final val catsEffectVersion = "3.3.5"
+    final val http4sVersion     = "0.23.11"
+    final val github4sVersion   = "0.31.0"
 
-    final val effectieVersion       = "1.15.0"
-    final val loggerFVersion        = "1.15.0"
+    final val effectieVersion       = "2.0.0-beta1"
+    final val loggerFVersion        = "2.0.0-beta1"
     final val justSysprocessVersion = "1.0.0"
+
+    final val ExtrasVersion = "0.13.0"
   }
 
 lazy val libs =
@@ -102,11 +104,13 @@ lazy val libs =
     lazy val http4sDsl: ModuleID    = "org.http4s" %% "http4s-dsl"          % props.http4sVersion
     lazy val http4sClient: ModuleID = "org.http4s" %% "http4s-blaze-client" % props.http4sVersion
 
-    lazy val effectie: ModuleID          = "io.kevinlee" %% "effectie-cats-effect" % props.effectieVersion
-    lazy val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats-effect" % props.loggerFVersion
-    lazy val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging" % props.loggerFVersion
+    lazy val effectie: ModuleID          = "io.kevinlee" %% "effectie-cats-effect3" % props.effectieVersion
+    lazy val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats" % props.loggerFVersion
+    lazy val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging"  % props.loggerFVersion
 
     lazy val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % props.justSysprocessVersion
+
+    lazy val extrasCats = "io.kevinlee" %% "extras-cats" % props.ExtrasVersion
 
     lazy val all: Seq[ModuleID] =
       List(
@@ -119,6 +123,7 @@ lazy val libs =
         loggerFCatsEffect,
         loggerFSbtLogging,
         justSysProcess,
+        extrasCats,
       ) ++ hedgehogLibs
   }
 

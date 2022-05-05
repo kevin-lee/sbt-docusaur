@@ -1,40 +1,39 @@
 package docusaur
 
-import java.io.File
-import java.nio.charset.Charset
-
 import cats._
 import cats.data.EitherT
 import cats.syntax.all._
 import docusaur.npm.Npm.NpmPath
 import docusaur.npm.{Npm, NpmCmd, NpmError}
-import effectie.cats.Effectful._
-import effectie.cats.EitherTSupport._
-import effectie.cats.{CanCatch, Fx}
+import effectie.core.Fx
+import effectie.syntax.all._
+import extras.cats.syntax.either._
 import filef.{FileError2, FileF2}
-import loggerf.cats._
-import loggerf.syntax._
-import loggerf.cats.{Log => LogF}
+import loggerf.core.syntax.all._
+import loggerf.core.{Log => LogF}
 import sbt.{IO => SbtIo}
+
+import java.io.File
+import java.nio.charset.Charset
 
 /** @author Kevin Lee
   * @since 2020-06-27
   */
 object Docusaur {
 
-  def deleteFilesIn[F[_]: Fx: CanCatch: Monad](
+  def deleteFilesIn[F[_]: Fx: Monad](
     what: String,
     file: File
   ): F[Either[FileError2, List[String]]] =
     FileF2.deleteAllIn[F](file)
 
-  def install[F[_]: Fx: CanCatch: LogF: Monad](
+  def install[F[_]: Fx: LogF: Monad](
     npmPath: Option[NpmPath],
     docusaurusDir: File
   ): F[Either[NpmError, Unit]] =
     runAndLogNpm("Docusaurus install", npmPath, docusaurusDir, NpmCmd.install)
 
-  def runBuild[F[_]: Fx: CanCatch: LogF: Monad](
+  def runBuild[F[_]: Fx: LogF: Monad](
     what: String,
     npmPath: Option[NpmPath],
     docusaurusDir: File
@@ -46,7 +45,7 @@ object Docusaur {
       NpmCmd.run(NpmCmd.Run.Param.build)
     )
 
-  def runAndLogNpm[F[_]: Fx: CanCatch: LogF: Monad](
+  def runAndLogNpm[F[_]: Fx: LogF: Monad](
     what: String,
     npmPath: Option[NpmPath],
     path: File,
@@ -55,16 +54,12 @@ object Docusaur {
     result <- EitherT(
                 Npm.run[F](npmPath, path.some, npmCmd)
               )
-    _      <- eitherTRightF[NpmError](
-                log(
-                  pureOf(
-                    s"""Successfully run npm for $what
-                       |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
-                       |${result.mkString("  ", "\n  ", "\n")}
-                       |""".stripMargin
-                  )
-                )(info)
-              )
+    _      <- pureOf(
+                s"""Successfully run npm for $what
+                   |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
+                   |${result.mkString("  ", "\n  ", "\n")}
+                   |""".stripMargin
+              ).log(info).rightT[NpmError]
   } yield ()).value
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
