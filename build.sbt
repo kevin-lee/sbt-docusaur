@@ -77,10 +77,8 @@ lazy val props =
 
     final val SbtGitHubPagesVersion = "0.10.0"
 
-    final val hedgehogVersion = "0.8.0"
-
     final val catsVersion       = "2.7.0"
-    final val catsEffectVersion = "3.3.5"
+    final val catsEffectVersion = "3.3.12"
     final val http4sVersion     = "0.23.11"
     final val github4sVersion   = "0.31.0"
 
@@ -88,7 +86,9 @@ lazy val props =
     final val loggerFVersion        = "2.0.0-beta1"
     final val justSysprocessVersion = "1.0.0"
 
-    final val ExtrasVersion = "0.13.0"
+    final val ExtrasVersion = "0.14.0"
+
+    final val hedgehogVersion = "0.9.0"
   }
 
 lazy val libs =
@@ -107,7 +107,7 @@ lazy val libs =
     lazy val http4sClient: ModuleID = "org.http4s" %% "http4s-blaze-client" % props.http4sVersion
 
     lazy val effectie: ModuleID          = "io.kevinlee" %% "effectie-cats-effect3" % props.effectieVersion
-    lazy val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats" % props.loggerFVersion
+    lazy val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats"         % props.loggerFVersion
     lazy val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging"  % props.loggerFVersion
 
     lazy val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % props.justSysprocessVersion
