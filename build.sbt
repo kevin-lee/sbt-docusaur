@@ -32,7 +32,7 @@ lazy val root = (project in file("."))
     pluginCrossBuild / sbtVersion     := "1.2.8",
     libraryDependencies ++= libs.all,
     testFrameworks ~= (fws => (TestFramework("hedgehog.sbt.Framework") +: fws).distinct),
-    addSbtPlugin("io.kevinlee" % "sbt-github-pages" % "0.9.0"),
+    addSbtPlugin("io.kevinlee" % "sbt-github-pages" % props.SbtGitHubPagesVersion),
     Compile / console / scalacOptions := scalacOptions.value diff List("-Ywarn-unused-import", "-Xfatal-warnings"),
     Compile / compile / wartremoverErrors ++= commonWarts,
     Test / compile / wartremoverErrors ++= commonWarts,
@@ -74,6 +74,8 @@ lazy val props =
     final val GlobalSbtVersion = "1.2.8"
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
+
+    final val SbtGitHubPagesVersion = "0.10.0"
 
     final val hedgehogVersion = "0.8.0"
 
