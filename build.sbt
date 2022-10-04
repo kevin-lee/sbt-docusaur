@@ -67,7 +67,7 @@ lazy val props =
     final val GitHubUsername = gitHubRepo.fold("Kevin-Lee")(_.orgToString)
     final val ProjectName    = gitHubRepo.fold("sbt-docusaur")(_.nameToString)
 
-    final val ProjectScalaVersion = "2.12.12"
+    final val ProjectScalaVersion = "2.12.17"
 
     val CrossScalaVersions: Seq[String] = Seq(ProjectScalaVersion)
 
@@ -75,18 +75,21 @@ lazy val props =
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
-    final val SbtGitHubPagesVersion = "0.10.0"
+    final val SbtGitHubPagesVersion = "0.11.0"
 
-    final val catsVersion       = "2.7.0"
-    final val catsEffectVersion = "3.3.12"
-    final val http4sVersion     = "0.23.11"
-    final val github4sVersion   = "0.31.0"
+    final val catsVersion       = "2.8.0"
+    final val catsEffectVersion = "3.3.14"
 
-    final val effectieVersion       = "2.0.0-beta1"
-    final val loggerFVersion        = "2.0.0-beta1"
+    final val http4sVersion            = "0.23.16"
+    final val http4sBlazeClientVersion = "0.23.12"
+
+    final val github4sVersion = "0.31.2"
+
+    final val effectieVersion       = "2.0.0-beta2"
+    final val loggerFVersion        = "2.0.0-beta2"
     final val justSysprocessVersion = "1.0.0"
 
-    final val ExtrasVersion = "0.14.0"
+    final val ExtrasVersion = "0.20.0"
 
     final val hedgehogVersion = "0.9.0"
   }
@@ -103,8 +106,8 @@ lazy val libs =
     lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % props.catsEffectVersion
     lazy val github4s: ModuleID   = "com.47deg"     %% "github4s"    % props.github4sVersion
 
-    lazy val http4sDsl: ModuleID    = "org.http4s" %% "http4s-dsl"          % props.http4sVersion
-    lazy val http4sClient: ModuleID = "org.http4s" %% "http4s-blaze-client" % props.http4sVersion
+    lazy val http4sDsl: ModuleID = "org.http4s" %% "http4s-dsl"          % props.http4sVersion
+    lazy val http4sClient        = "org.http4s" %% "http4s-blaze-client" % props.http4sBlazeClientVersion
 
     lazy val effectie: ModuleID          = "io.kevinlee" %% "effectie-cats-effect3" % props.effectieVersion
     lazy val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats"         % props.loggerFVersion
