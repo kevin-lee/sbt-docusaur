@@ -3,12 +3,12 @@ package docusaur
 import cats.effect._
 import cats.effect.unsafe.implicits.global
 import docusaur.npm.{Npm, NpmCmd, NpmError}
-import effectie.cats.fx.ioFx
+import effectie.ce3.fx.ioFx
 import extras.cats.syntax.either._
 import filef.FileError2
 import githubpages.GitHubPagesPlugin
 import githubpages.GitHubPagesPlugin.{autoImport => ghpg}
-import loggerf.cats.instances.logF
+import loggerf.instances.cats.logF
 import loggerf.logger._
 import sbt.Keys.streams
 import sbt.util.Logger
