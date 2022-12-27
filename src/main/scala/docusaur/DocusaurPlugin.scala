@@ -1,18 +1,18 @@
 package docusaur
 
-import cats.effect._
+import cats.effect.*
 import cats.effect.unsafe.implicits.global
 import docusaur.npm.{Npm, NpmCmd, NpmError}
-import effectie.ce3.fx.ioFx
-import extras.cats.syntax.either._
+import effectie.instances.ce3.fx.ioFx
+import extras.cats.syntax.either.*
 import filef.FileError2
 import githubpages.GitHubPagesPlugin
-import githubpages.GitHubPagesPlugin.{autoImport => ghpg}
+import githubpages.GitHubPagesPlugin.autoImport as ghpg
 import loggerf.instances.cats.logF
-import loggerf.logger._
+import loggerf.logger.*
 import sbt.Keys.streams
 import sbt.util.Logger
-import sbt.{IO => _, _}
+import sbt.{IO as _, *}
 
 import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
 
@@ -25,7 +25,7 @@ object DocusaurPlugin extends AutoPlugin {
   override def trigger: PluginTrigger = noTrigger
 
   object autoImport extends DocusaurKeys
-  import autoImport._
+  import autoImport.*
 
   private val internalLogger: ConcurrentMap[String, CanLog] =
     new ConcurrentHashMap(1)

@@ -1,8 +1,8 @@
 package filef
 
-import java.io.File
-
 import errors.StackTraceToString
+
+import java.io.File
 
 /** @author Kevin Lee
   * @since 2020-06-06

@@ -1,8 +1,8 @@
 package docusaur
 
-import java.io.File
+import sbt.*
 
-import sbt._
+import java.io.File
 
 /** @author Kevin Lee
   * @since 2020-06-17
