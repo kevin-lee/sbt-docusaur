@@ -77,43 +77,43 @@ lazy val props =
 
     final val SbtGitHubPagesVersion = "0.12.0"
 
-    final val catsVersion       = "2.9.0"
-    final val catsEffectVersion = "3.4.3"
+    final val CatsVersion       = "2.9.0"
+    final val CatsEffectVersion = "3.4.3"
 
-    final val http4sVersion            = "0.23.16"
-    final val http4sBlazeClientVersion = "0.23.13"
+    final val Http4sVersion            = "0.23.16"
+    final val Http4sBlazeClientVersion = "0.23.13"
 
-    final val github4sVersion = "0.31.2"
+    final val Github4sVersion = "0.31.2"
 
-    final val effectieVersion       = "2.0.0-beta4"
-    final val loggerFVersion        = "2.0.0-beta4"
-    final val justSysprocessVersion = "1.0.0"
+    final val EffectieVersion       = "2.0.0-beta4"
+    final val LoggerFVersion        = "2.0.0-beta4"
+    final val JustSysprocessVersion = "1.0.0"
 
     final val ExtrasVersion = "0.26.0"
 
-    final val hedgehogVersion = "0.10.1"
+    final val HedgehogVersion = "0.10.1"
   }
 
 lazy val libs =
   new {
     lazy val hedgehogLibs: Seq[ModuleID] = Seq(
-      "qa.hedgehog" %% "hedgehog-core"   % props.hedgehogVersion % Test,
-      "qa.hedgehog" %% "hedgehog-runner" % props.hedgehogVersion % Test,
-      "qa.hedgehog" %% "hedgehog-sbt"    % props.hedgehogVersion % Test,
+      "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion % Test,
+      "qa.hedgehog" %% "hedgehog-runner" % props.HedgehogVersion % Test,
+      "qa.hedgehog" %% "hedgehog-sbt"    % props.HedgehogVersion % Test,
     )
 
-    lazy val cats: ModuleID       = "org.typelevel" %% "cats-core"   % props.catsVersion
-    lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % props.catsEffectVersion
-    lazy val github4s: ModuleID   = "com.47deg"     %% "github4s"    % props.github4sVersion
+    lazy val cats: ModuleID       = "org.typelevel" %% "cats-core"   % props.CatsVersion
+    lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
+    lazy val github4s: ModuleID   = "com.47deg"     %% "github4s"    % props.Github4sVersion
 
-    lazy val http4sDsl: ModuleID = "org.http4s" %% "http4s-dsl"          % props.http4sVersion
-    lazy val http4sClient        = "org.http4s" %% "http4s-blaze-client" % props.http4sBlazeClientVersion
+    lazy val http4sDsl: ModuleID = "org.http4s" %% "http4s-dsl"          % props.Http4sVersion
+    lazy val http4sClient        = "org.http4s" %% "http4s-blaze-client" % props.Http4sBlazeClientVersion
 
-    lazy val effectie: ModuleID          = "io.kevinlee" %% "effectie-cats-effect3" % props.effectieVersion
-    lazy val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats"         % props.loggerFVersion
-    lazy val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging"  % props.loggerFVersion
+    lazy val effectie: ModuleID          = "io.kevinlee" %% "effectie-cats-effect3" % props.EffectieVersion
+    lazy val loggerFCatsEffect: ModuleID = "io.kevinlee" %% "logger-f-cats"         % props.LoggerFVersion
+    lazy val loggerFSbtLogging: ModuleID = "io.kevinlee" %% "logger-f-sbt-logging"  % props.LoggerFVersion
 
-    lazy val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % props.justSysprocessVersion
+    lazy val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % props.JustSysprocessVersion
 
     lazy val extrasCats = "io.kevinlee" %% "extras-cats" % props.ExtrasVersion
 
