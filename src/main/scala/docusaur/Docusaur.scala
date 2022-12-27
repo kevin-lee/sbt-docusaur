@@ -1,17 +1,17 @@
 package docusaur
 
-import cats._
+import cats.*
 import cats.data.EitherT
-import cats.syntax.all._
+import cats.syntax.all.*
 import docusaur.npm.Npm.NpmPath
 import docusaur.npm.{Npm, NpmCmd, NpmError}
 import effectie.core.Fx
-import effectie.syntax.all._
-import extras.cats.syntax.either._
+import effectie.syntax.all.*
+import extras.cats.syntax.either.*
 import filef.{FileError2, FileF2}
-import loggerf.core.syntax.all._
-import loggerf.core.{Log => LogF}
-import sbt.{IO => SbtIo}
+import loggerf.core.Log as LogF
+import loggerf.core.syntax.all.*
+import sbt.IO as SbtIo
 
 import java.io.File
 import java.nio.charset.Charset
@@ -54,12 +54,13 @@ object Docusaur {
     result <- EitherT(
                 Npm.run[F](npmPath, path.some, npmCmd)
               )
-    _      <- pureOf(
+    _      <-
                 s"""Successfully run npm for $what
                    |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
                    |${result.mkString("  ", "\n  ", "\n")}
-                   |""".stripMargin
-              ).log(info).rightT[NpmError]
+                   |"""
+                  .stripMargin.logS_(info)
+                  .rightT[NpmError]
   } yield ()).value
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
@@ -69,7 +70,7 @@ object Docusaur {
   )(
     logMessage: String
   ): F[Unit] =
-    log(pureOf(logMessage))(info) >>
+    logS_(logMessage)(info) *>
       effectOf(
         SbtIo.write(
           theFile,

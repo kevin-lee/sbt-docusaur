@@ -1,12 +1,12 @@
 package filef
 
-import cats._
+import cats.*
 import cats.data.EitherT
-import cats.syntax.flatMap._
-import cats.syntax.traverse._
+import cats.syntax.flatMap.*
+import cats.syntax.traverse.*
 import effectie.core.Fx
-import effectie.syntax.all._
-import extras.cats.syntax.all._
+import effectie.syntax.all.*
+import extras.cats.syntax.all.*
 
 import java.io.File
 import scala.annotation.tailrec
@@ -33,9 +33,9 @@ object FileF2 {
       list         <- effectOf(file.listFiles.toList).rightT
       allFiles     <- effectOf(listAllIn(list, Nil)).rightT
       filesDeleted <- allFiles.traverse[ET, String] { file =>
-                        (effectOf(file.delete()) >> effectOf(file.getCanonicalPath))
-                          .catchNonFatal(throwable => FileError2.inDeletion(file, throwable))
-                          .eitherT
+                        (effectOf(file.delete()) >> effectOf(file.getCanonicalPath)).catchNonFatal {
+                          case throwable => FileError2.inDeletion(file, throwable)
+                        }.eitherT
                       }
 
     } yield filesDeleted).value

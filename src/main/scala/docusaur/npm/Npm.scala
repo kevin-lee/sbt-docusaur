@@ -1,10 +1,10 @@
 package docusaur.npm
 
-import cats._
-import cats.syntax.all._
+import cats.*
+import cats.syntax.all.*
 import effectie.core.Fx
-import effectie.syntax.all._
-import extras.cats.syntax.either._
+import effectie.syntax.all.*
+import extras.cats.syntax.either.*
 import just.sysprocess.{ProcessError, ProcessResult, SysProcess}
 
 import java.io.File
