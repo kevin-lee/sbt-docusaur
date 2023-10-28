@@ -2,7 +2,7 @@ import ProjectInfo._
 
 ThisBuild / organization := props.Org
 ThisBuild / scalaVersion := props.ProjectScalaVersion
-ThisBuild / developers   := List(
+ThisBuild / developers := List(
   Developer(
     props.GitHubUsername,
     "Kevin Lee",
@@ -11,13 +11,13 @@ ThisBuild / developers   := List(
   )
 )
 
-ThisBuild / homepage     := url(s"https://github.com/${props.GitHubUsername}/${props.ProjectName}").some
-ThisBuild / scmInfo      := ScmInfo(
+ThisBuild / homepage := url(s"https://github.com/${props.GitHubUsername}/${props.ProjectName}").some
+ThisBuild / scmInfo := ScmInfo(
   url(s"https://github.com/${props.GitHubUsername}/${props.ProjectName}"),
   s"git@github.com:${props.GitHubUsername}/${props.ProjectName}.git",
 ).some
 
-ThisBuild / startYear    := 2020.some
+ThisBuild / startYear := 2020.some
 
 Global / sbtVersion := props.GlobalSbtVersion
 
@@ -26,10 +26,10 @@ ThisBuild / resolvers += "sonatype-snapshots" at s"https://${props.SonatypeCrede
 lazy val root = (project in file("."))
   .enablePlugins(SbtPlugin, DevOopsGitHubReleasePlugin, DocusaurPlugin)
   .settings(
-    name                              := props.ProjectName,
-    description                       := "sbt plugin to publish GitHub Pages",
-    crossSbtVersions                  := props.CrossSbtVersions,
-    pluginCrossBuild / sbtVersion     := "1.2.8",
+    name := props.ProjectName,
+    description := "sbt plugin to publish GitHub Pages",
+    crossSbtVersions := props.CrossSbtVersions,
+    pluginCrossBuild / sbtVersion := "1.2.8",
     libraryDependencies ++= libs.all,
     testFrameworks ~= (fws => (TestFramework("hedgehog.sbt.Framework") +: fws).distinct),
     addSbtPlugin("io.kevinlee" % "sbt-github-pages" % props.SbtGitHubPagesVersion),
@@ -43,11 +43,11 @@ lazy val root = (project in file("."))
 
     /* Publish { */
     publishMavenStyle := true,
-    licenses          := List("MIT" -> url("http://opensource.org/licenses/MIT")),
+    licenses := List("MIT" -> url("http://opensource.org/licenses/MIT")),
     /* } Publish */
 
     /* Docs { */
-    docusaurDir      := (ThisBuild / baseDirectory).value / "website",
+    docusaurDir := (ThisBuild / baseDirectory).value / "website",
     docusaurBuildDir := docusaurDir.value / "build",
     /* } Docs */
 
@@ -85,22 +85,22 @@ lazy val props =
 
     final val Github4sVersion = "0.31.2"
 
-    final val EffectieVersion       = "2.0.0-beta4"
-    final val LoggerFVersion        = "2.0.0-beta4"
+    final val EffectieVersion = "2.0.0-beta4"
+    final val LoggerFVersion  = "2.0.0-beta4"
+
+    val LogbackVersion = "1.3.11"
+
     final val JustSysprocessVersion = "1.0.0"
 
     final val ExtrasVersion = "0.26.0"
 
     final val HedgehogVersion = "0.10.1"
+
+    val CirceVersion = "0.14.1"
   }
 
 lazy val libs =
   new {
-    lazy val hedgehogLibs: Seq[ModuleID] = Seq(
-      "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion % Test,
-      "qa.hedgehog" %% "hedgehog-runner" % props.HedgehogVersion % Test,
-      "qa.hedgehog" %% "hedgehog-sbt"    % props.HedgehogVersion % Test,
-    )
 
     lazy val cats: ModuleID       = "org.typelevel" %% "cats-core"   % props.CatsVersion
     lazy val catsEffect: ModuleID = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
@@ -115,7 +115,31 @@ lazy val libs =
 
     lazy val justSysProcess: ModuleID = "io.kevinlee" %% "just-sysprocess" % props.JustSysprocessVersion
 
-    lazy val extrasCats = "io.kevinlee" %% "extras-cats" % props.ExtrasVersion
+    lazy val extrasCats    = "io.kevinlee" %% "extras-cats"     % props.ExtrasVersion
+    lazy val extrasScalaIo = "io.kevinlee" %% "extras-scala-io" % props.ExtrasVersion
+
+    lazy val tests = new {
+
+      lazy val hedgehogLibs: Seq[ModuleID] = Seq(
+        "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion % Test,
+        "qa.hedgehog" %% "hedgehog-runner" % props.HedgehogVersion % Test,
+        "qa.hedgehog" %% "hedgehog-sbt"    % props.HedgehogVersion % Test,
+      )
+
+      lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % props.LogbackVersion % Test
+
+      lazy val loggerFSlf4j: ModuleID = "io.kevinlee" %% "logger-f-slf4j" % props.LoggerFVersion % Test
+
+      lazy val extrasHedgehogCe3 = "io.kevinlee" %% "extras-hedgehog-ce3" % props.ExtrasVersion % Test
+
+      lazy val circe =
+        List(
+          "io.circe" %% "circe-core"    % props.CirceVersion % Test,
+          "io.circe" %% "circe-generic" % props.CirceVersion % Test,
+          "io.circe" %% "circe-parser"  % props.CirceVersion % Test,
+          "io.circe" %% "circe-literal" % props.CirceVersion % Test,
+        )
+    }
 
     lazy val all: Seq[ModuleID] =
       List(
@@ -129,12 +153,16 @@ lazy val libs =
         loggerFSbtLogging,
         justSysProcess,
         extrasCats,
-      ) ++ hedgehogLibs
+        extrasScalaIo,
+        tests.logbackClassic,
+        tests.extrasHedgehogCe3,
+        tests.loggerFSlf4j,
+      ) ++ tests.hedgehogLibs ++ tests.circe
   }
 
 lazy val mavenCentralPublishSettings: SettingsDefinition = List(
   /* Publish to Maven Central { */
   sonatypeCredentialHost := props.SonatypeCredentialHost,
-  sonatypeRepository     := props.SonatypeRepository,
+  sonatypeRepository := props.SonatypeRepository,
   /* } Publish to Maven Central */
 )

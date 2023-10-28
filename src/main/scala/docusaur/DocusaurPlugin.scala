@@ -53,8 +53,8 @@ object DocusaurPlugin extends AutoPlugin {
     aOrB.fold(a => throw new MessageOnlyException(aToString(a)), identity)
 
   override lazy val projectSettings: Seq[Def.Setting[_]] = Seq(
-    docusaurNpmPath                           := none[File],
-    docusaurCleanNodeModules                  := Def.taskDyn {
+    docusaurNpmPath := none[File],
+    docusaurCleanNodeModules := Def.taskDyn {
       val log             = streams.value.log
       val nodeModulesPath = docusaurDir.value / "node_modules"
       if (nodeModulesPath.exists()) {
@@ -75,7 +75,7 @@ object DocusaurPlugin extends AutoPlugin {
         }
       }
     }.value,
-    docusaurInstall                           := Def.taskDyn {
+    docusaurInstall := Def.taskDyn {
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
       implicit val canLog: CanLog = loggerFLogger(streams.value.log)
       val docusaurusDir           = docusaurDir.value
@@ -88,7 +88,7 @@ object DocusaurPlugin extends AutoPlugin {
         )(NpmError.render)
       )
     }.value,
-    docusaurCleanBuild                        := Def.taskDyn {
+    docusaurCleanBuild := Def.taskDyn {
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
       implicit val canLog: CanLog = loggerFLogger(streams.value.log)
       val buildPath               = docusaurBuildDir.value
@@ -114,7 +114,7 @@ object DocusaurPlugin extends AutoPlugin {
         }
       }
     }.value,
-    docusaurBuild                             := Def.taskDyn {
+    docusaurBuild := Def.taskDyn {
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
       implicit val canLog: CanLog = loggerFLogger(streams.value.log)
       val docusaurusDir           = docusaurDir.value
@@ -132,7 +132,7 @@ object DocusaurPlugin extends AutoPlugin {
         )(NpmError.render)
       )
     }.value,
-    docusaurAuditFix                          := Def.taskDyn {
+    docusaurAuditFix := Def.taskDyn {
       @SuppressWarnings(Array("org.wartremover.warts.ExplicitImplicitTypes"))
       implicit val canLog: CanLog = loggerFLogger(streams.value.log)
       val docusaurusDir           = docusaurDir.value
@@ -150,11 +150,11 @@ object DocusaurPlugin extends AutoPlugin {
         )(NpmError.render)
       )
     }.value,
-    docusaurAlgoliaConfigFilename             := sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json"),
-    docusaurAlgoliaAppId                      := sys.env.get("ALGOLIA_APP_ID"),
-    docusaurAlgoliaApiKey                     := sys.env.get("ALGOLIA_API_KEY"),
-    docusaurAlgoliaIndexName                  := sys.env.get("ALGOLIA_INDEX_NAME"),
-    docusaurGenerateAlgoliaConfigFile         := Def.taskDyn {
+    docusaurAlgoliaConfigFilename := sys.env.getOrElse("ALGOLIA_CONFIG_FILENAME", "algolia.config.json"),
+    docusaurAlgoliaAppId := sys.env.get("ALGOLIA_APP_ID"),
+    docusaurAlgoliaApiKey := sys.env.get("ALGOLIA_API_KEY"),
+    docusaurAlgoliaIndexName := sys.env.get("ALGOLIA_INDEX_NAME"),
+    docusaurGenerateAlgoliaConfigFile := Def.taskDyn {
       val algoliaConfigFilename = docusaurAlgoliaConfigFilename.value
       val algoliaConfigPath     = docusaurDir.value / algoliaConfigFilename
       val algoliaAppId          = docusaurAlgoliaAppId.value
@@ -175,10 +175,22 @@ object DocusaurPlugin extends AutoPlugin {
       )
 
     }.value,
-    docusaurGoogleAnalyticsConfigFilename     :=
+    docusaurGoogleAnalyticsConfigFilename :=
       sys.env.getOrElse("GA_CONFIG_FILENAME", "google-analytics.config.json"),
-    docusaurGoogleAnalyticsTrackingId         := sys.env.get("GA_TRACKING_ID").map(_.trim).filter(_.nonEmpty),
-    docusaurGoogleAnalyticsAnonymizeIp        := {
+    docusaurGoogleAnalyticsTrackingId :=
+      sys
+        .env
+        .get("GA_TRACKING_ID")
+        .map(_.trim)
+        .filter(_.nonEmpty)
+        .toList
+        .flatMap {
+          _.split(",")
+            .map(_.trim)
+            .filter(_.nonEmpty)
+            .toList
+        },
+    docusaurGoogleAnalyticsAnonymizeIp := {
       returnOrThrowMessageOnlyException(
         IO(
           sys
@@ -212,7 +224,7 @@ object DocusaurPlugin extends AutoPlugin {
           .unsafeRunSync()
       )
     }.value,
-    ghpg.gitHubPagesSiteDir                   := docusaurBuildDir.value,
+    ghpg.gitHubPagesSiteDir := docusaurBuildDir.value,
   )
 
 }

@@ -82,9 +82,11 @@ trait DocusaurKeys {
       """The name of Google Analytics config file (default: sys.env.getOrElse("GA_CONFIG_FILENAME", "google-analytics.config.json"))"""
     )
 
-  lazy val docusaurGoogleAnalyticsTrackingId: SettingKey[Option[String]] =
-    settingKey[Option[String]](
-      """Google Analytics Tracking ID. If None, Google Analytics config with an empty object is created. (default: sys.env.get("GA_TRACKING_ID") )"""
+  lazy val docusaurGoogleAnalyticsTrackingId: SettingKey[List[String]] =
+    settingKey[List[String]](
+      """Google Analytics Tracking IDs. If Nil (an empty List), Google Analytics config with an empty object is created. """ +
+        """If you use the environment GA_TRACKING_ID, You can have multiple tracking IDs with comma separated values (CSV) """ +
+        """(e.g. GA_TRACKING_ID=G-123,G-456,G-789) (default: sys.env.get("GA_TRACKING_ID") )"""
     )
 
   lazy val docusaurGoogleAnalyticsAnonymizeIp: SettingKey[Option[Boolean]] =
