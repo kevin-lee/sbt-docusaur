@@ -55,12 +55,13 @@ object Docusaur {
                 Npm.run[F](npmPath, path.some, npmCmd)
               )
     _      <-
-                s"""Successfully run npm for $what
+      s"""Successfully run npm for $what
                    |  - command: npm run ${NpmCmd.values(npmCmd).mkString(" ")}
                    |${result.mkString("  ", "\n  ", "\n")}
                    |"""
-                  .stripMargin.logS_(info)
-                  .rightT[NpmError]
+        .stripMargin
+        .logS_(info)
+        .rightT[NpmError]
   } yield ()).value
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter"))
@@ -136,66 +137,11 @@ object Docusaur {
 
   def createGoogleAnalyticsConfig[F[_]: Fx: LogF: Monad](
     googleAnalyticsConfigPath: File,
-    googleAnalyticsTrackingId: Option[String],
+    googleAnalyticsTrackingId: List[String],
     googleAnalyticsAnonymizeIp: Option[Boolean]
   ): F[Unit] =
     (googleAnalyticsTrackingId, googleAnalyticsAnonymizeIp) match {
-      case (Some(trackingId), Some(false)) =>
-        if (trackingId.isEmpty)
-          logAndWriteFile(googleAnalyticsConfigPath, "{}")(
-            s"""The Google Analytics config info is found in environment variables but the tracking ID value is empty.
-               |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
-               |""".stripMargin
-          )
-        else
-          logAndWriteFile(
-            googleAnalyticsConfigPath,
-            s"""{
-               |  "trackingID": "$trackingId",
-               |  "anonymizeIP": false
-               |}
-               |""".stripMargin
-          )(
-            s"""The Google Analytics config info is found so the Google Analytics config file will be generated at $googleAnalyticsConfigPath
-               |""".stripMargin
-          )
-
-      case (Some(trackingId), Some(true)) =>
-        if (trackingId.isEmpty)
-          logAndWriteFile(googleAnalyticsConfigPath, "{}")(
-            s"""The Google Analytics config info is found in environment variables but the tracking ID value is empty.
-               |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
-               |""".stripMargin
-          )
-        else
-          logAndWriteFile(
-            googleAnalyticsConfigPath,
-            s"""{
-               |  "trackingID": "$trackingId",
-               |  "anonymizeIP": true
-               |}
-               |""".stripMargin
-          )(
-            s"""The Google Analytics config info is found so the Google Analytics config file will be generated at $googleAnalyticsConfigPath
-               |""".stripMargin
-          )
-
-      case (Some(trackingId), None) =>
-        logAndWriteFile(
-          googleAnalyticsConfigPath,
-          s"""{
-             |  "trackingID": "$trackingId"
-             |}
-             |""".stripMargin
-        )(
-          s"""The Google Analytics tracking ID is found but no anonymizeIP config value is found in the environment variables.
-             |So It will create the Google Analytics config file with 'trackingID' without 'anonymizeIP' at $googleAnalyticsConfigPath
-             |If you want to set up anonymizeIP, set the following env var.
-             |  - GA_ANONYMIZE_IP
-             |""".stripMargin
-        )
-
-      case (None, Some(_)) =>
+      case (Nil, Some(_)) =>
         logAndWriteFile(googleAnalyticsConfigPath, "{}")(
           s"""The Google Analytics is partially found in the environment variables.
              |It has anonymize IP option but no tracking ID.
@@ -205,7 +151,7 @@ object Docusaur {
              |""".stripMargin
         )
 
-      case (None, None) =>
+      case (Nil, None) =>
         logAndWriteFile(googleAnalyticsConfigPath, "{}")(
           s"""No Google Analytics (Optional) config info has been found in the environment variables.
              |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
@@ -214,6 +160,80 @@ object Docusaur {
              |  - GA_ANONYMIZE_IP
              |""".stripMargin
         )
+
+      case (trackingIds, Some(false)) =>
+        val trackingIdsJson = toJsonStringOrJsonArrayOfString(trackingIds)
+        if (trackingIdsJson.isEmpty)
+          logAndWriteFile(googleAnalyticsConfigPath, "{}")(
+            s"""The Google Analytics config info is found in environment variables but the tracking ID value is empty.
+               |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
+               |""".stripMargin
+          )
+        else
+          logAndWriteFile(
+            googleAnalyticsConfigPath,
+            s"""{
+               |  "trackingID": $trackingIdsJson,
+               |  "anonymizeIP": false
+               |}
+               |""".stripMargin
+          )(
+            s"""The Google Analytics config info is found so the Google Analytics config file will be generated at $googleAnalyticsConfigPath
+               |""".stripMargin
+          )
+
+      case (trackingIds, Some(true)) =>
+        val trackingIdsJson = toJsonStringOrJsonArrayOfString(trackingIds)
+        if (trackingIdsJson.isEmpty)
+          logAndWriteFile(googleAnalyticsConfigPath, "{}")(
+            s"""The Google Analytics config info is found in environment variables but the tracking ID value is empty.
+               |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
+               |""".stripMargin
+          )
+        else
+          logAndWriteFile(
+            googleAnalyticsConfigPath,
+            s"""{
+               |  "trackingID": $trackingIdsJson,
+               |  "anonymizeIP": true
+               |}
+               |""".stripMargin
+          )(
+            s"""The Google Analytics config info is found so the Google Analytics config file will be generated at $googleAnalyticsConfigPath
+               |""".stripMargin
+          )
+
+      case (trackingIds, None) =>
+        val trackingIdsJson = toJsonStringOrJsonArrayOfString(trackingIds)
+        if (trackingIdsJson.isEmpty)
+          logAndWriteFile(googleAnalyticsConfigPath, "{}")(
+            s"""The Google Analytics config info is found in environment variables but the tracking ID value is empty.
+               |So It will create the Google Analytics config file with an empty object at $googleAnalyticsConfigPath
+               |""".stripMargin
+          )
+        else
+          logAndWriteFile(
+            googleAnalyticsConfigPath,
+            s"""{
+             |  "trackingID": $trackingIdsJson
+             |}
+             |""".stripMargin
+          )(
+            s"""The Google Analytics tracking ID is found but no anonymizeIP config value is found in the environment variables.
+             |So It will create the Google Analytics config file with 'trackingID' without 'anonymizeIP' at $googleAnalyticsConfigPath
+             |If you want to set up anonymizeIP, set the following env var.
+             |  - GA_ANONYMIZE_IP
+             |""".stripMargin
+          )
+
+    }
+
+  private def toJsonStringOrJsonArrayOfString(ss: List[String]): String =
+    ss match {
+      case Nil => ""
+      case onlyValue :: Nil => s""""$onlyValue""""
+      case _ :: _ =>
+        ss.map(value => s""""$value"""").mkString("[", ",", "]")
     }
 
 }
