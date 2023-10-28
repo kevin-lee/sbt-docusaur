@@ -194,20 +194,30 @@ docusaurGoogleAnalyticsConfigFilename := "ga-conf.json"
 
 
 ### Google Analytics Tracking ID (Optional)
-| Name                                | Value Type       | Default                               |
-| ----------------------------------- | ---------------- | ------------------------------------- |
-| `docusaurGoogleAnalyticsTrackingId` | `Option[String]` | `sys.env.getOrElse("GA_TRACKING_ID")` |
+| Name                                | Value Type     | Default                               |
+| ----------------------------------- |----------------| ------------------------------------- |
+| `docusaurGoogleAnalyticsTrackingId` | `List[String]` | `sys.env.getOrElse("GA_TRACKING_ID")` |
 
 Google Analytics Tracking ID. If missing, Google Analytics config with an empty object (`{}`) is created.
 
 e.g.)
 
 ```shell
-export GA_TRACKING_ID=UA-000000-1
+export GA_TRACKING_ID=G-000000
 ```
 Or
 ```scala
-docusaurGoogleAnalyticsTrackingId := Some("UA-000000-1")
+docusaurGoogleAnalyticsTrackingId := List("G-000000")
+```
+***
+You can have multiple Tracking IDs with comma separated values (CSV) in the environment variable `GA_TRACKING_ID`.
+
+```shell
+export GA_TRACKING_ID=G-000000,G-000001,G-000002,G-000003
+```
+Or
+```scala
+docusaurGoogleAnalyticsTrackingId := List("G-000000", "G-000001", "G-000002", "G-000003")
 ```
 
 
