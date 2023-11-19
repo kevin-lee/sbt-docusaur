@@ -16,7 +16,7 @@ object FileError2 {
   def inDeletion(file: File, throwable: Throwable): FileError2 = InDeletion(file, throwable)
 
   def render(fileError: FileError2): String = fileError match {
-    case InDeletion(file, throwable) =>
+    case InDeletion(file @ _, throwable) =>
       s"${StackTraceToString.render(throwable)}"
   }
 

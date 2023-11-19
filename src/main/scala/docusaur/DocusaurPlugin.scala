@@ -61,7 +61,7 @@ object DocusaurPlugin extends AutoPlugin {
         Def.task(
           returnOrThrowMessageOnlyException(
             (for {
-              files <- Docusaur.deleteFilesIn("'clean node_modules'", nodeModulesPath).eitherT
+              files <- Docusaur.deleteFilesIn(nodeModulesPath).eitherT // clean node_modules
               _     <- log.info(toFileRemovalMessage(nodeModulesPath, files)).rightTF[IO, FileError2]
             } yield ())
               .value
@@ -96,7 +96,7 @@ object DocusaurPlugin extends AutoPlugin {
         Def.task(
           returnOrThrowMessageOnlyException(
             (for {
-              files <- Docusaur.deleteFilesIn[IO]("'clean the Docusaurus build dir'", buildPath).eitherT
+              files <- Docusaur.deleteFilesIn[IO](buildPath).eitherT // clean the Docusaurus build dir
               _     <- streams
                          .value
                          .log
