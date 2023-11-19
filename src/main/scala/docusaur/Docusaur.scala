@@ -22,7 +22,6 @@ import java.nio.charset.Charset
 object Docusaur {
 
   def deleteFilesIn[F[_]: Fx: Monad](
-    what: String,
     file: File
   ): F[Either[FileError2, List[String]]] =
     FileF2.deleteAllIn[F](file)
