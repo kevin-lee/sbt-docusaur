@@ -4,15 +4,16 @@ title: Getting Started
 sidebar_label: Getting Started
 slug: "/"
 ---
-## ![](/img/sbt-docusaur-logo-64x64.png) sbt-docusaur
-sbt plugin for Docusaurus
-
+## sbt-docusaur
 
 [![Build Status](https://github.com/Kevin-Lee/sbt-docusaur/workflows/Build%20All/badge.svg)](https://github.com/Kevin-Lee/sbt-docusaur/actions?workflow=Build+All)
 [![Release Status](https://github.com/Kevin-Lee/sbt-docusaur/workflows/Release/badge.svg)](https://github.com/Kevin-Lee/sbt-docusaur/actions?workflow=Release)
-
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/sbt-docusaur/badge.svg)](https://search.maven.org/artifact/io.kevinlee/sbt-docusaur)
 [![Latest version](https://index.scala-lang.org/kevin-lee/sbt-docusaur/sbt-docusaur/latest.svg)](https://index.scala-lang.org/kevin-lee/sbt-docusaur/sbt-docusaur)
+
+![sbt-docusaur logo](/img/sbt-docusaur-400x400.png)
+
+sbt plugin for Docusaurus
 
 ## Get sbt-docusaur
 
