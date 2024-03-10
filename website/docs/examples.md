@@ -44,7 +44,7 @@ Add `sbt-mdoc` plugin and `sbt-docusaur` to `project/plugins.sbt`.
 ```scala title="project/plugins.sbt"
 addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.3.6" )
 
-addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.15.0")
+addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.16.0")
 ```
 
 In your `build.sbt`, add a sub-project for the doc site with `sbt-mdoc` and `sbt-docusaur`, and set up the Docusarus.
