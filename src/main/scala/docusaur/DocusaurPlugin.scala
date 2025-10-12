@@ -8,7 +8,6 @@ import extras.cats.syntax.either.*
 import filef.FileError2
 import githubpages.GitHubPagesPlugin
 import githubpages.GitHubPagesPlugin.autoImport as ghpg
-import loggerf.instances.cats.logF
 import loggerf.logger.*
 import sbt.Keys.streams
 import sbt.util.Logger
