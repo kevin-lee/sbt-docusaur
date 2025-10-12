@@ -21,8 +21,6 @@ ThisBuild / startYear := 2020.some
 
 Global / sbtVersion := props.GlobalSbtVersion
 
-ThisBuild / resolvers += "sonatype-snapshots" at s"https://${props.SonatypeCredentialHost}/content/repositories/snapshots"
-
 lazy val root = (project in file("."))
   .enablePlugins(SbtPlugin, DevOopsGitHubReleasePlugin, DocusaurPlugin)
   .settings(
@@ -52,51 +50,47 @@ lazy val root = (project in file("."))
     /* } Docs */
 
   )
-  .settings(mavenCentralPublishSettings)
 
 lazy val props =
   new {
-
-    val SonatypeCredentialHost = "s01.oss.sonatype.org"
-    val SonatypeRepository     = s"https://$SonatypeCredentialHost/service/local"
 
     final val Org = "io.kevinlee"
 
     private val gitHubRepo = findRepoOrgAndName
 
-    final val GitHubUsername = gitHubRepo.fold("Kevin-Lee")(_.orgToString)
+    final val GitHubUsername = gitHubRepo.fold("kevin-lee")(_.orgToString)
     final val ProjectName    = gitHubRepo.fold("sbt-docusaur")(_.nameToString)
 
     final val ProjectScalaVersion = "2.12.18"
 
     val CrossScalaVersions: Seq[String] = Seq(ProjectScalaVersion)
 
-    final val GlobalSbtVersion = "1.6.2"
+    final val GlobalSbtVersion = "1.11.2"
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
-    final val SbtGitHubPagesVersion = "0.15.0"
+    final val SbtGitHubPagesVersion = "0.16.0"
 
     final val CatsVersion       = "2.13.0"
-    final val CatsEffectVersion = "3.5.7"
+    final val CatsEffectVersion = "3.6.3"
 
-    final val Http4sVersion            = "0.23.30"
+    final val Http4sVersion            = "0.23.32"
     final val Http4sBlazeClientVersion = "0.23.17"
 
     final val Github4sVersion = "0.33.3"
 
     final val EffectieVersion = "2.0.0"
-    final val LoggerFVersion  = "2.1.18"
+    final val LoggerFVersion  = "2.4.0"
 
-    val LogbackVersion = "1.5.18"
+    val LogbackVersion = "1.5.19"
 
     final val JustSysprocessVersion = "1.0.0"
 
-    final val ExtrasVersion = "0.44.0"
+    final val ExtrasVersion = "0.49.0"
 
-    final val HedgehogVersion = "0.12.0"
+    final val HedgehogVersion = "0.13.0"
 
-    val CirceVersion = "0.14.12"
+    val CirceVersion = "0.14.15"
   }
 
 lazy val libs =
@@ -159,10 +153,3 @@ lazy val libs =
         tests.loggerFSlf4j,
       ) ++ tests.hedgehogLibs ++ tests.circe
   }
-
-lazy val mavenCentralPublishSettings: SettingsDefinition = List(
-  /* Publish to Maven Central { */
-  sonatypeCredentialHost := props.SonatypeCredentialHost,
-  sonatypeRepository := props.SonatypeRepository,
-  /* } Publish to Maven Central */
-)

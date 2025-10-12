@@ -14,7 +14,6 @@ import io.circe.literal.*
 import io.circe.parser.*
 import io.circe.syntax.*
 import io.circe.{Decoder, Encoder, Json}
-import loggerf.instances.cats.*
 import loggerf.logger.{CanLog, Slf4JLogger}
 
 import java.io.File
