@@ -6,7 +6,7 @@ updates:
       interval: "weekly"
 
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/website"
     schedule:
       interval: "weekly"
     groups:
