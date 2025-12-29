@@ -69,7 +69,7 @@ lazy val props =
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
-    final val SbtGitHubPagesVersion = "0.16.0"
+    val SbtGitHubPagesVersion = "0.16.0"
 
     final val CatsVersion       = "2.13.0"
     final val CatsEffectVersion = "3.6.3"
@@ -79,14 +79,14 @@ lazy val props =
 
     final val Github4sVersion = "0.33.3"
 
-    final val EffectieVersion = "2.0.0"
-    final val LoggerFVersion  = "2.4.0"
+    val EffectieVersion = "2.3.0"
+    val LoggerFVersion  = "2.8.1"
 
     val LogbackVersion = "1.5.19"
 
     final val JustSysprocessVersion = "1.0.0"
 
-    final val ExtrasVersion = "0.49.0"
+    val ExtrasVersion = "0.50.1"
 
     final val HedgehogVersion = "0.13.0"
 
