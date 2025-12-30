@@ -41,6 +41,7 @@ jobs:
         run: |
           rm website/package-lock.json
           sbt clean \
+            gitHubPagesCreateGitHubPagesBranchIfNotExist \
             docusaurGenerateAlgoliaConfigFile \
             docusaurGenerateGoogleAnalyticsConfigFile \
             docusaurInstall \
