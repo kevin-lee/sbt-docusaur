@@ -2,7 +2,16 @@
 id: examples
 title: Examples
 ---
+
+<details>
+  <summary>Legacy: Manual <code>gh-pages</code> branch creation (not recommended)</summary>
+
 ## Publish Website to GitHub Pages
+
+:::warning NOTE
+It is no longer required as `gitHubPagesCreateGitHubPagesBranchIfNotExist` task will handle it automatically.
+:::
+
 To publish your website to GitHub Actions, first, make sure you have `gh-pages` branch.
 If you don't already have it, create it first.
 
@@ -24,6 +33,8 @@ $ git push origin gh-pages
 
 # Now you can remove this project in the temporary location.
 ```
+
+</details>
 
 ## Use Docusaurus 2 + mdoc + GitHub Actions
 

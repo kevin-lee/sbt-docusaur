@@ -40,8 +40,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           rm website/package-lock.json
-          sbt clean \
+          sbt \
             gitHubPagesCreateGitHubPagesBranchIfNotExist \
+            clean \
             docusaurGenerateAlgoliaConfigFile \
             docusaurGenerateGoogleAnalyticsConfigFile \
             docusaurInstall \
