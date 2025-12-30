@@ -59,8 +59,29 @@ Generate the Google Analytics config file at `docusaurDir.value`.
 ## Publish
 
 ### Publish to GitHub Pages
-`sbt-docusaur` uses <a href="https://sbt-github-pages.kevinly.dev" target="_blank"><code>sbt-github-pages</code></a> 
+
+`sbt-docusaur` uses <a href="https://sbt-github-pages.kevinly.dev" target="_blank"><code>sbt-github-pages</code></a>
 to publish the website to GitHub Pages.
+
+:::warning IMPORTANT!
+
+Make sure to run 
+```
+gitHubPagesCreateGitHubPagesBranchIfNotExist
+```
+before any publish task 
+to make sure the `gh-pages` branch exists. If the `gh-pages` branch doesn't exist,
+it will create the `gh-pages` branch.
+:::
+
+The task to publish the website to GitHub Pages is
+
 ```
 publishToGitHubPages
 ```
+
+:::info
+Please check out [this example GitHub Actions](/docs/examples)
+to learn how to use it with GitHub Actions.
+:::
+
