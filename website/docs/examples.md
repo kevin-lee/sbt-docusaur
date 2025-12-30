@@ -42,9 +42,9 @@ Check out the [Docusuarus docs](https://v2.docusaurus.io/docs/) and finish confi
 Add `sbt-mdoc` plugin and `sbt-docusaur` to `project/plugins.sbt`. 
 
 ```scala title="project/plugins.sbt"
-addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.3.6" )
+addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.8.2" )
 
-addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.17.0")
+addSbtPlugin("io.kevinlee" % "sbt-docusaur" % "0.20.0")
 ```
 
 In your `build.sbt`, add a sub-project for the doc site with `sbt-mdoc` and `sbt-docusaur`, and set up the Docusarus.
@@ -71,9 +71,9 @@ lazy val docs = (project in file("generated-docs"))
 
 ```
 
-In your `website/docusaurus.config.js`, make sure that Docusaurus knows where your generated Makrdown files are.
+In your `website/docusaurus.config.ts`, make sure that Docusaurus knows where your generated Makrdown files are.
 So make sure your Docusaurus config has
-```javascript
+```typescript
 docs: {
   path: '../generated-docs/target/mdoc/'
 }
@@ -82,8 +82,8 @@ docs: {
 So it may look like,
 
 e.g.)
-```javascript title="website/docusaurus.config.js"
-module.exports = {
+```typescript title="website/docusaurus.config.ts"
+const config: Config = {
   // ...
 
   presets: [
@@ -92,14 +92,16 @@ module.exports = {
       {
         docs: {
           path: '../generated-docs/target/mdoc/',
-          homePageId: 'docs',
-          sidebarPath: require.resolve('./sidebars.js'),
-        },
+          sidebarPath: require.resolve('./sidebars.ts'),
+        }
+      }
     ]
   ]
 
   // ...
 };
+
+export default config;
 ```
 
 ### GitHub Actions
@@ -128,36 +130,30 @@ jobs:
     strategy:
       matrix:
         scala:
-          - { binary-version: "2.12", java-version: "adopt@1.8" }
+          - { java-version: "21", java-distribution: "temurin" }
+        node:
+          - { version: "22.19.0" }
 
     steps:
-      - uses: actions/checkout@v2.3.4
-      - uses: olafurpg/setup-scala@v10
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
         with:
           java-version: ${{ matrix.scala.java-version }}
-      - uses: actions/setup-node@v2.1.5
+          distribution: ${{ matrix.scala.java-distribution }}
+          cache: 'sbt'
+      - uses: sbt/setup-sbt@v1
+      - uses: actions/setup-node@v6
         with:
-          node-version: '14.16.0'
+          node-version: ${{ matrix.node.version }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Cache SBT
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.ivy2/cache
-            ~/.cache/coursier
-            ~/.sbt
-          key: ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-${{ hashFiles('**/*.sbt') }}
-          restore-keys: |
-            ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-
-
       - name: Cache npm
-        uses: actions/cache@v2
+        uses: actions/cache@v5
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ matrix.node.version }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-node-${{ matrix.node.version }}
 
       - name: Build and publish website
         env:
@@ -169,6 +165,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           sbt \
+            docs/gitHubPagesCreateGitHubPagesBranchIfNotExist \
             docs/clean \
             docs/mdoc \
             docs/docusaurGenerateAlgoliaConfigFile \
