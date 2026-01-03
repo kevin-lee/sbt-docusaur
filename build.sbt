@@ -25,7 +25,7 @@ lazy val root = (project in file("."))
   .enablePlugins(SbtPlugin, DevOopsGitHubReleasePlugin, DocusaurPlugin)
   .settings(
     name := props.ProjectName,
-    description := "sbt plugin to publish GitHub Pages",
+    description := "sbt plugin to build and publish Docusaurus docs to GitHub Pages",
     crossSbtVersions := props.CrossSbtVersions,
     pluginCrossBuild / sbtVersion := props.GlobalSbtVersion,
     libraryDependencies ++= libs.all,
@@ -69,7 +69,7 @@ lazy val props =
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
-    val SbtGitHubPagesVersion = "0.18.1"
+    val SbtGitHubPagesVersion = "0.19.0"
 
     final val CatsVersion       = "2.13.0"
     final val CatsEffectVersion = "3.6.3"
