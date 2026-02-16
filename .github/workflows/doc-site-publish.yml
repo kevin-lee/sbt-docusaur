@@ -14,7 +14,7 @@ jobs:
         scala:
           - { version: "2.13.10", binary-version: "2.13", java-version: "11", java-distribution: "temurin" }
         node:
-          - { version: "24.12.0" }
+          - { version: "24.13.1" }
 
     steps:
       - uses: actions/checkout@v6
@@ -39,7 +39,6 @@ jobs:
           GA_ANONYMIZE_IP: ${{ secrets.GA_ANONYMIZE_IP }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          rm website/package-lock.json
           sbt \
             gitHubPagesCreateGitHubPagesBranchIfNotExist \
             clean \
