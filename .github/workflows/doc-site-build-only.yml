@@ -15,7 +15,7 @@ jobs:
         scala:
           - { version: "2.13.10", binary-version: "2.13", java-version: "11", java-distribution: "temurin" }
         node:
-          - { version: "22.19.0" }
+          - { version: "24.13.1" }
 
     steps:
       - uses: actions/checkout@v6
@@ -31,8 +31,6 @@ jobs:
         with:
           node-version: ${{ matrix.node.version }}
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
-          cache-dependency-path: 'website/package-lock.json'
 
       - uses: actions/setup-node@v6
         if: github.ref == 'refs/heads/main'
@@ -48,7 +46,6 @@ jobs:
           GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
           GA_ANONYMIZE_IP: ${{ secrets.GA_ANONYMIZE_IP }}
         run: |
-          rm website/package-lock.json
           sbt clean \
             docusaurGenerateAlgoliaConfigFile \
             docusaurGenerateGoogleAnalyticsConfigFile \
