@@ -22,7 +22,7 @@ ThisBuild / startYear := 2020.some
 Global / sbtVersion := props.GlobalSbtVersion
 
 lazy val root = (project in file("."))
-  .enablePlugins(SbtPlugin, DevOopsGitHubReleasePlugin, DocusaurPlugin)
+  .enablePlugins(SbtPlugin, DevOopsGitHubReleasePlugin)
   .settings(
     name := props.ProjectName,
     description := "sbt plugin to build and publish Docusaurus docs to GitHub Pages",
@@ -44,51 +44,46 @@ lazy val root = (project in file("."))
     licenses := List("MIT" -> url("http://opensource.org/licenses/MIT")),
     /* } Publish */
 
-    /* Docs { */
-    docusaurDir := (ThisBuild / baseDirectory).value / "website",
-    docusaurBuildDir := docusaurDir.value / "build",
-    /* } Docs */
-
   )
 
 lazy val props =
   new {
 
-    final val Org = "io.kevinlee"
+    val Org = "io.kevinlee"
 
     private val gitHubRepo = findRepoOrgAndName
 
-    final val GitHubUsername = gitHubRepo.fold("kevin-lee")(_.orgToString)
-    final val ProjectName    = gitHubRepo.fold("sbt-docusaur")(_.nameToString)
+    val GitHubUsername = gitHubRepo.fold("kevin-lee")(_.orgToString)
+    val ProjectName    = gitHubRepo.fold("sbt-docusaur")(_.nameToString)
 
-    final val ProjectScalaVersion = "2.12.18"
+    val ProjectScalaVersion = "2.12.18"
 
     val CrossScalaVersions: Seq[String] = Seq(ProjectScalaVersion)
 
-    final val GlobalSbtVersion = "1.11.2"
+    val GlobalSbtVersion = "1.11.2"
 
     val CrossSbtVersions: Seq[String] = Seq(GlobalSbtVersion)
 
     val SbtGitHubPagesVersion = "0.19.0"
 
-    final val CatsVersion       = "2.13.0"
-    final val CatsEffectVersion = "3.6.3"
+    val CatsVersion       = "2.13.0"
+    val CatsEffectVersion = "3.6.3"
 
-    final val Http4sVersion            = "0.23.32"
-    final val Http4sBlazeClientVersion = "0.23.17"
+    val Http4sVersion            = "0.23.32"
+    val Http4sBlazeClientVersion = "0.23.17"
 
-    final val Github4sVersion = "0.33.3"
+    val Github4sVersion = "0.33.3"
 
     val EffectieVersion = "2.3.0"
     val LoggerFVersion  = "2.8.1"
 
     val LogbackVersion = "1.5.19"
 
-    final val JustSysprocessVersion = "1.0.0"
+    val JustSysprocessVersion = "1.0.0"
 
     val ExtrasVersion = "0.50.1"
 
-    final val HedgehogVersion = "0.13.0"
+    val HedgehogVersion = "0.13.0"
 
     val CirceVersion = "0.14.15"
   }
