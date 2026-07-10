@@ -3,7 +3,7 @@ package docusaur
 import cats.effect.{IO, Resource}
 import cats.syntax.all.*
 import cats.{Eq, Show}
-import effectie.instances.ce3.fx.*
+import effectie.instances.ce3.fx.ioFx
 import effectie.syntax.all.*
 import extras.hedgehog.ce3.syntax.runner.*
 import extras.scala.io.file.TempFiles

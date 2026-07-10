@@ -23,7 +23,7 @@ object Npm {
   )(
     resultHandler: List[String] => A
   ): F[Either[NpmError, A]] = (for {
-    sysCommand <- pureOf(SysProcess.singleSysProcess(baseDir = baseDir, command, commands: _*))
+    sysCommand <- pureOf(SysProcess.singleSysProcess(baseDir = baseDir, command, commands*))
                     .rightT[NpmError]
     result     <- effectOf(sysCommand.run())
                     .eitherT
@@ -67,7 +67,7 @@ object Npm {
     execute(
       baseDir,
       npm(npmPath),
-      NpmCmd.values(npmCmd): _*
+      NpmCmd.values(npmCmd)*
     )(identity)
 
 }
