@@ -90,7 +90,7 @@ lazy val props =
     val Sbt1Version = "1.11.2"
     val Sbt2Version = "2.0.1"
 
-    val Sbt2CompatVersion = "0.1.0"
+    val Sbt2CompatVersion = "0.2.0"
 
     /* Scala-3-only options. The shared sources must keep compiling on Scala 2.12, so a
      * handful of Scala 3 warnings can't be fixed at the source; `-Xfatal-warnings` comes
@@ -119,28 +119,28 @@ lazy val props =
       "-Wconf:msg=discarded non-Unit value:s",
     )
 
-    val SbtGitHubPagesVersion = "0.20.0"
+    val SbtGitHubPagesVersion = "0.21.0"
 
     val CatsVersion       = "2.13.0"
-    val CatsEffectVersion = "3.7.0"
+    val CatsEffectVersion = "3.7.1"
 
-    val EffectieVersion = "2.4.0"
+    val EffectieVersion = "2.5.0"
 
     /* logger-f-sbt-logging is versioned independently of logger-f since 2.11.0. Its Scala 3
      * build links against sbt 2's util-logging_3, which is what the sbt 2 axis needs.
      */
-    val LoggerFVersion           = "2.12.0"
-    val LoggerFSbtLoggingVersion = "2.12.0"
+    val LoggerFVersion           = "2.14.0"
+    val LoggerFSbtLoggingVersion = "2.14.0"
 
-    val LogbackVersion = "1.5.19"
+    val LogbackVersion = "1.5.38"
 
     val JustSysprocessVersion = "1.0.0"
 
-    val ExtrasVersion = "0.55.0"
+    val ExtrasVersion = "0.56.0"
 
-    val HedgehogVersion = "0.13.1"
+    val HedgehogVersion = "0.15.0"
 
-    val CirceVersion = "0.14.15"
+    val CirceVersion = "0.14.16"
   }
 
 lazy val libs =
