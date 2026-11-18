@@ -43,7 +43,7 @@ lazy val root = (project in file("."))
      * plugin being built, not of the build itself.
      */
     addSbtPlugin(libs.sbt2Compat),
-    scalacOptions ++= (if (scalaBinaryVersion.value == "2.12") List.empty else props.Scala3ScalacOptions),
+    scalacOptions ++= (if (scalaBinaryVersion.value == "2.12") List("-Xsource:3", "-release:8") else props.Scala3ScalacOptions),
     /* } Cross-build */
 
     libraryDependencies ++= libs.all,
@@ -53,6 +53,9 @@ lazy val root = (project in file("."))
     /* Scripted { */
     scriptedLaunchOpts := scriptedLaunchOpts.value ++ Seq("-Xmx1024M", "-Dplugin.version=" + version.value),
     scriptedBufferLog := false,
+    scriptedSbt := {
+      if (scalaBinaryVersion.value == "2.12") "1.13.1" else props.Sbt2Version
+    },
     /* } Scripted */
     Compile / console / scalacOptions := scalacOptions.value diff List("-Ywarn-unused-import", "-Xfatal-warnings"),
     Compile / compile / wartremoverErrors ++= commonWarts,

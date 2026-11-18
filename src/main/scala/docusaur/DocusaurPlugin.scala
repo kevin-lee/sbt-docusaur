@@ -1,5 +1,7 @@
 package docusaur
 
+import sbtcompat.PluginCompat.*
+
 import cats.effect.*
 import cats.effect.unsafe.implicits.global
 import docusaur.npm.{Npm, NpmCmd, NpmError}
@@ -12,7 +14,6 @@ import loggerf.logger.*
 import sbt.Keys.streams
 import sbt.util.Logger
 import sbt.{IO as _, *}
-import sbtcompat.PluginCompat.*
 
 import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
 
